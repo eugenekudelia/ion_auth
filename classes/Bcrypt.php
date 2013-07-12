@@ -1,6 +1,15 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-
+<?php defined('SYSPATH') or die('No direct script access.');
+/**
+ * @package    Kohana/Ion_Auth
+ * @category   Libraries
+ * 
+ * @link       https://github.com/benedmunds/CodeIgniter-Ion-Auth
+ *             GitHub
+ * @link       http://stackoverflow.com/questions/4795385/how-do-you-use-bcrypt-for-hashing-passwords-in-php
+ *             stackoverflow.com
+ * @link       http://stackoverflow.com/a/6337021
+ *             shortlink to answer
+ */
 class Bcrypt {
   private $rounds;
   public function __construct($params=array('rounds'=>7)) {
