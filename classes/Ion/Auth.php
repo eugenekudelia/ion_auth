@@ -159,7 +159,7 @@ class Ion_Auth
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function forgotten_password($identity)    //changed $email to $identity
+	public function forgotten_password($identity, $slug = '')    //changed $email to $identity
 	{
 		if ( ! $this->ion_auth_model->forgotten_password($identity))   //changed
 		{
@@ -180,6 +180,7 @@ class Ion_Auth
 		$data = array(
 			'identity' => $user->{$this->_config()->get('identity')},
 			'forgotten_password_code' => $user->forgotten_password_code,
+			'slug' => $slug
 		);
 
 		if ( ! $this->use_builtin_email)
