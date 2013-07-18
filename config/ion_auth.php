@@ -148,6 +148,15 @@ return array(
 
 	/*
 	 | -------------------------------------------------------------------------
+	 | Use forgot_password_compltet() to generate password?
+	 | -------------------------------------------------------------------------
+	 | Default: activate.tpl.php
+	 */
+	'public_forgot_password_generate' => FALSE,
+	'cms_forgot_password_generate' => FALSE,
+
+	/*
+	 | -------------------------------------------------------------------------
 	 | Email templates.
 	 | -------------------------------------------------------------------------
 	 | Folder where email templates are stored.
