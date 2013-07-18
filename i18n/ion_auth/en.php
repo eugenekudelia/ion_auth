@@ -138,24 +138,24 @@ return array(
 	'forgot_password_email_identity_label'		=> 'Email',
 
 	// Reset Password
-	'reset_password_heading'								=> 'Change Password',
+	'reset_password_heading'								=> 'Reset Password',
 	'reset_password_new_password_label'						=> 'New Password (at least %s characters long):',
 	'reset_password_new_password_confirm_label'				=> 'Confirm New Password:',
-	'reset_password_submit_btn'								=> 'Change',
+	'reset_password_submit_btn'								=> 'Submit',
 	'reset_password_validation_new_password_label'			=> 'New Password',
 	'reset_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
 
-	// Activation Email
-	//'email_activate_heading'	=> 'Activate account for %s',
-	//'email_activate_subheading'	=> 'Please click this link to %s.',
-	//'email_activate_link'		=> 'Activate Your Account',
-	//
-	//// Forgot Password Email
-	//'email_forgot_password_heading'		=> 'Reset Password for %s',
-	//'email_forgot_password_subheading'	=> 'Please click this link to %s.',
-	//'email_forgot_password_link'		=> 'Reset Your Password',
-	//
-	//// New Password Email
-	//'email_new_password_heading'	=> 'New Password for %s',
-	//'email_new_password_subheading'	=> 'Your password has been reset to: %s',
+		// Activation Email
+	'Activate account for :identity'	=> 'Activate account for :identity',
+	'Please click this link to :activate'	=> 'Please click this link to :activate.',
+	'Activate Your Account'		=> 'Activate Your Account',
+	
+	// Forgot Password Email
+	'Reset Password for :identity'		=> 'Reset Password for :identity',
+	'Please click this link to :reset_password'	=> 'Please click this link to :reset_password.',
+	'Reset Your Password'		=> 'Reset Your Password',
+	
+	// New Password Email
+	'New Password for :identity'	=> 'New Password for :identity',
+	'Your password has been reset to: :new_password'	=> 'Your password has been reset to: :new_password',
 );
