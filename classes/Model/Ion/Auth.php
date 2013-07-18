@@ -825,7 +825,7 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
-		$query = DB::select('forgotten_password_code')
+		$query = DB::select('forgotten_password_time')
 		            ->from($this->tables['users'])
 		            ->where('forgotten_password_code', '=', $code)
 		            ->limit(1)

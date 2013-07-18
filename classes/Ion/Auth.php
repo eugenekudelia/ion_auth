@@ -225,17 +225,17 @@ class Ion_Auth
 		$identity = $this->_config()->get('identity');
 		$query = $this->where('forgotten_password_code', '=', $code)->users();
 
-		if ($query->count() === 0)
+		if ($query->rows_count() === 0)
 		{
 			$this->ion_auth_model->trigger_events(array('post_password_change', 'password_change_unsuccessful'));
 			$this->set_error('password_change_unsuccessful');
 			return FALSE;
 		}
 
+		$profile  = $query->row();
+
 		if ($new_password = $this->ion_auth_model->forgotten_password_complete($code, $profile->salt))
 		{
-			$profile  = $query->row();
-
 			$data = array(
 				'identity'     => $profile->{$identity},
 				'new_password' => $new_password
