@@ -186,7 +186,7 @@ return array(
 	 | -------------------------------------------------------------------------
 	 | Default: new_password.tpl.php
 	 */
-	'email_forgot_password_complete'	=> 'new_password.tpl',
+	'email_forgot_password_complete'	=> 'forgot_password_complete.tpl',
 
 	/*
 	 | -------------------------------------------------------------------------
