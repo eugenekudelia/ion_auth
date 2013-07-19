@@ -885,10 +885,11 @@ class Model_Ion_Auth extends Model_Common
 	 * @return mixed boolean / string
 	 * @author Eugene Kudelia
 	 */
-	public function forgotten_password_identity($email, $identity)
+	public function forgotten_password_identity($login, $email, $identity)
 	{
 		$query = DB::select($identity)
 					->from($this->tables['users'])
+					->where($identity, '=', $login)
 					->where('email', '=', $email)
 					->limit(1)
 					->execute();

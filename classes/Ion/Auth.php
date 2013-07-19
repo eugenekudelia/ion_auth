@@ -159,7 +159,7 @@ class Ion_Auth
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function forgotten_password($identity, $slug = '')    //changed $email to $identity
+	public function forgotten_password($identity, $switch = '')    //changed $email to $identity
 	{
 		if ( ! $this->ion_auth_model->forgotten_password($identity))   //changed
 		{
@@ -176,68 +176,49 @@ class Ion_Auth
 			return FALSE;
 		}
 
-		$user = $query->row();  //changed to get_user_by_identity from email
-		$data = array(
-			'identity' => $user->{$this->_config()->get('identity')},
-			'forgotten_password_code' => $user->forgotten_password_code,
-			'slug' => $slug
-		);
+		$user = $query->row();
+		$code = $user->forgotten_password_code;
 
-		if ( ! $this->use_builtin_email)
+		if (is_string($switch))
 		{
-			$this->set_message('forgot_password_successful');
-			return $data;
-		}
-		else
-		{
-			$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password'), $data)->render();
+			$data = array(
+				'identity' => $user->{$this->_config()->get('identity')},
+				'forgotten_password_code' => $code,
+				'cms' => $switch
+			);
 
-			$this->email->clear();
-			$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
-			$this->email->to($user->email);
-			$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_forgotten_password_subject'));
-			$this->email->message($message);
-
-			if ($this->email->send())
+			if ( ! $this->use_builtin_email)
 			{
 				$this->set_message('forgot_password_successful');
-				return TRUE;
+				return $data;
 			}
 			else
 			{
-				$this->set_error('forgot_password_unsuccessful');
-				return FALSE;
+				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password'), $data)->render();
+
+				$this->email->clear();
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
+				$this->email->to($user->email);
+				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_forgotten_password_subject'));
+				$this->email->message($message);
+
+				if ($this->email->send())
+				{
+					$this->set_message('forgot_password_successful');
+					return TRUE;
+				}
+				else
+				{
+					$this->set_error('forgot_password_unsuccessful');
+					return FALSE;
+				}
 			}
 		}
-	}
-
-	/**
-	 * forgotten_password_complete
-	 *
-	 * @return void
-	 * @author Mathew
-	 * @kohana Eugene Kudelia
-	 */
-	public function forgotten_password_complete($code)
-	{
-		$this->ion_auth_model->trigger_events('pre_password_change');
-
-		$identity = $this->_config()->get('identity');
-		$query = $this->where('forgotten_password_code', '=', $code)->users();
-
-		if ($query->rows_count() === 0)
-		{
-			$this->ion_auth_model->trigger_events(array('post_password_change', 'password_change_unsuccessful'));
-			$this->set_error('password_change_unsuccessful');
-			return FALSE;
-		}
-
-		$profile  = $query->row();
-
-		if ($new_password = $this->ion_auth_model->forgotten_password_complete($code, $profile->salt))
+		// added functionality of forgotten_password_complete()
+		elseif ($switch === TRUE AND ($new_password = $this->ion_auth_model->forgotten_password_complete($code, $user->salt)))
 		{
 			$data = array(
-				'identity'     => $profile->{$identity},
+				'identity'     => $user->{$this->_config()->get('identity')},
 				'new_password' => $new_password
 			);
 			if ( ! $this->use_builtin_email)
@@ -253,7 +234,7 @@ class Ion_Auth
 
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
-				$this->email->to($profile->email);
+				$this->email->to($user->email);
 				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_new_password_subject'));
 				$this->email->message($message);
 
@@ -261,20 +242,20 @@ class Ion_Auth
 				{
 					$this->set_message('password_change_successful');
 					$this->ion_auth_model->trigger_events(array('post_password_change', 'password_change_successful'));
+
 					return TRUE;
 				}
 				else
 				{
 					$this->set_error('password_change_unsuccessful');
 					$this->ion_auth_model->trigger_events(array('post_password_change', 'password_change_unsuccessful'));
+
 					return FALSE;
 				}
 			}
+
+			return FALSE;
 		}
-
-		$this->ion_auth_model->trigger_events(array('post_password_change', 'password_change_unsuccessful'));
-
-		return FALSE;
 	}
 
 	/**
