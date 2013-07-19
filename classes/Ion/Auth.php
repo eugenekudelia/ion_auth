@@ -89,12 +89,12 @@ class Ion_Auth
 	/**
 	 *
 	 */
-	public static function instance(array $config = NULL)
+	public static function instance()
 	{
 		if ( ! isset(Ion_Auth::$_instance))
 		{
 			// Create a new Ion_Auth instance
-			Ion_Auth::$_instance = new Ion_Auth($config);
+			Ion_Auth::$_instance = new Ion_Auth();
 		}
 
 		return Ion_Auth::$_instance;
@@ -107,10 +107,10 @@ class Ion_Auth
 	 * @author Ben
 	 * @kohana Eugene Kudelia
 	 */
-	public function __construct(array $config = NULL)
+	public function __construct()
 	{
 		// Create Ion Auth model instance
-		$this->ion_auth_model = Model_Ion_Auth::instance($config);
+		$this->ion_auth_model = Model::factory('Ion_Auth');
 
 		$this->_cache_user_in_group =& $this->ion_auth_model->_cache_user_in_group;
 

@@ -233,25 +233,11 @@ class Model_Ion_Auth extends Model_Common
 	protected $_cache_user_permissions = array();
 
 
-	/**
-	 *
-	 */
-	public static function instance(array $config = NULL)
-	{
-		return new Model_Ion_Auth($config);
-	}
-
-	public function __construct(array $config = NULL)
+	public function __construct()
 	{
 		// Load Ion Auth config object
 		$this->config = Kohana::$config->load('ion_auth');
-		if (is_array($config) and ! empty($config))
-		{
-			foreach ($config as $var => $new_value)
-			{
-				$this->config->set($var, $new_value);
-			}
-		}
+
 		// Create Session instance
 		$this->session = Session::instance($this->config->get('session_type'));
 		//initialize db tables data
