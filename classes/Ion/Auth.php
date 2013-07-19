@@ -235,7 +235,7 @@ class Ion_Auth
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($user->email);
-				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_new_password_subject'));
+				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_forgotten_password_complete_subject'));
 				$this->email->message($message);
 
 				if ($this->email->send())
