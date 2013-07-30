@@ -18,17 +18,22 @@
 */
 return array(
 
+	//
+	'char' => 'зн.',
+
 	// Errors
-	'error_csrf' => 'This form post did not pass our security checks.',
+	'error_csrf' => 'Запрошенные данные не прошли проверку на безопасность',
 
 	// Login
 	'login_heading'			=> 'Вход',
+	'login_heading_to'		=> 'Вход в',
 	'login_subheading'		=> 'Please login with your email/username and password below.',
-	'login_identity_label'	=> 'Email/Username:',
-	'login_password_label'	=> 'Password:',
-	'login_remember_label'	=> 'Remember Me:',
-	'login_submit_btn'		=> 'Login',
-	'login_forgot_password'	=> 'Forgot your password?',
+	'login_email_label'		=> 'Email:',
+	'login_username_label'	=> 'Логин:',
+	'login_password_label'	=> 'Пароль:',
+	'login_remember_label'	=> 'Запомнить меня:',
+	'login_submit_btn'		=> 'Войти',
+	'login_forgot_password'	=> 'Забыли пароль?',
 
 	// Index
 	'index_heading'				=> 'Users',
@@ -129,19 +134,19 @@ return array(
 	'change_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
 
 	// Forgot Password
-	'forgot_password_heading'					=> 'Forgot Password',
+	'forgot_password_heading'					=> 'Забыли пароль?',
 	'forgot_password_subheading'				=> 'Please enter your %s so we can send you an email to reset your password.',
 	'forgot_password_email_label'				=> '%s:',
-	'forgot_password_submit_btn'				=> 'Submit',
-	'forgot_password_validation_email_label'	=> 'Email Address',
+	'forgot_password_submit_btn'				=> 'Отправить',
+	'forgot_password_validation_email_label'	=> 'Email вашего аккаунта',
 	'forgot_password_username_identity_label'	=> 'Username',
 	'forgot_password_email_identity_label'		=> 'Email',
 
 	// Reset Password
-	'reset_password_heading'								=> 'Reset Password',
-	'reset_password_new_password_label'						=> 'New Password (at least %s characters long):',
-	'reset_password_new_password_confirm_label'				=> 'Confirm New Password:',
-	'reset_password_submit_btn'								=> 'Submit',
+	'reset_password_heading'								=> 'Обновление пароля',
+	'reset_password_new_password_label'						=> 'Новый пароль:',
+	'reset_password_new_password_confirm_label'				=> 'Подтвердите пароль:',
+	'reset_password_submit_btn'								=> 'Сохранить',
 	'reset_password_validation_new_password_label'			=> 'New Password',
 	'reset_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
 

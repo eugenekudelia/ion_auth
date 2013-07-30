@@ -18,15 +18,20 @@
 */
 return array(
 
+	//
+	'char' => 'cahrs',
+
 	// Errors
 	'error_csrf' => 'This form post did not pass our security checks.',
 
 	// Login
 	'login_heading'			=> 'Login',
+	'login_heading_to'		=> 'Login to',
 	'login_subheading'		=> 'Please login with your email/username and password below.',
-	'login_identity_label'	=> 'Email/Username:',
+	'login_email_label'		=> 'Email:',
+	'login_username_label'	=> 'Username:',
 	'login_password_label'	=> 'Password:',
-	'login_remember_label'	=> 'Remember Me:',
+	'login_remember_label'	=> 'Remember me:',
 	'login_submit_btn'		=> 'Login',
 	'login_forgot_password'	=> 'Forgot your password?',
 
