@@ -871,22 +871,28 @@ class Model_Ion_Auth extends Model_Common
 	 * @return mixed boolean / string
 	 * @author Eugene Kudelia
 	 */
-	public function forgotten_password_identity($login, $email, $identity)
+	public function forgotten_password_identity($email, $login = NULL)
 	{
-		$query = DB::select($identity)
-					->from($this->tables['users'])
-					->where($identity, '=', $login)
-					->where('email', '=', $email)
-					->limit(1)
-					->execute();
+		$identity = $this->config->get('identity');
 
-		if ($query->count() !== 1)
+		$select = DB::select($identity)
+					->from($this->tables['users'])
+					->where('email', '=', $email);
+
+		if (is_string($login) AND strlen($login) >= $this->config->get('min_username_length'))
+		{
+			$select = $select->where($identity, '=', $login);
+		}
+
+		$result = $select->limit(1)->execute();
+
+		if ($result->count() !== 1)
 		{
 			$this->set_error($identity.'_not_found');
 			return FALSE;
 		}
 
-		return $query->get($identity);
+		return $result->get($identity);
 	}
 
 	/**
