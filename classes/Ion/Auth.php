@@ -347,11 +347,13 @@ class Ion_Auth
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function register($username, $password, $email, $additional_data = array(), $group_ids = array()) //need to test email activation
+	public function register($username, $password, $email, $additional_data = array(), $group_ids = array(), $cms = FALSE) //need to test email activation
 	{
 		$this->ion_auth_model->trigger_events('pre_account_creation');
 
-		$email_activation = $this->_config()->get('email_activation');
+		$email_activation = ! $cms
+			? $this->_config()->get('email_activation')
+			: FALSE; // method is called from the CMS module
 
 		if ( ! $email_activation)
 		{
