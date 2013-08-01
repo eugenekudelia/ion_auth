@@ -194,7 +194,7 @@ class Ion_Auth
 			}
 			else
 			{
-				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password'), $data)->render();
+				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_complete'), $data)->render();
 
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
@@ -230,7 +230,7 @@ class Ion_Auth
 			}
 			else
 			{
-				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_complete'), $data)->render();
+				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_new'), $data)->render();
 
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));

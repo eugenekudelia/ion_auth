@@ -146,16 +146,25 @@ return array(
 	'reset_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
 
 	// Activation Email
-	'Activate account for :identity'	=> 'Activate account for :identity',
-	'Please click this link to :activate'	=> 'Please click this link to :activate.',
-	'Activate Your Account'		=> 'Activate Your Account',
+	'Activate account for:'	=> 'Активация аккаунта пользователя',
+	'Please click this link to'	=> 'Нажмите на ссылку для',
+	'activate your account.'		=> 'активации вашего аккаунта.',
 	
-	// Forgot Password Email
-	'Reset Password for :identity'		=> 'Reset Password for :identity',
-	'Please click this link to :reset_password'	=> 'Please click this link to :reset_password.',
-	'Reset Your Password'		=> 'Reset Your Password',
+	// Forgot Password Email link to reset
+	'Reset password for user:'		=> 'Обновление пароля пользователя:',
+	'Please click this link to:'	=> 'Перейдите по ссылке для',
+	'reset your password'		=> 'обновления вашего пароля.',
 	
-	// New Password Email
-	'New Password for :identity'	=> 'New Password for :identity',
-	'Your password has been reset to: :new_password'	=> 'Your password has been reset to: :new_password',
+	// Forgot Password Email new / New Password Email
+	'New Password for user:'	=> 'Обновление пароля пользователя:',
+	'Your password has been reset to:'	=> 'Ваш новый пароль:',
+	
+	// New User Password Email
+	'Password for the new user:' => 'Пароль нового пользователяв:',
+	'Welcome to :site_name, :identity!' => 'Добро пожаловать на :site_name, :identity!',
+	'Password to your account is:' => 'Ваш пароль:',
+	
+	// Common for passwords that displayed in Email
+	'You can change the password on your profile page when logged into your account'
+		=> 'Вы можете изменить пароль на странице профиля, войдя в свой аккаунт.',
 );

@@ -178,7 +178,7 @@ return array(
 	 | -------------------------------------------------------------------------
 	 | Default: forgot_password.tpl.php
 	 */
-	'email_forgot_password'	=> 'forgot_password.tpl',
+	'email_forgot_password_new'	=> 'forgot_password_new.tpl',
 
 	/*
 	 | -------------------------------------------------------------------------
@@ -186,7 +186,7 @@ return array(
 	 | -------------------------------------------------------------------------
 	 | Default: new_password.tpl.php
 	 */
-	'email_forgot_password_complete'	=> 'forgot_password_complete.tpl',
+	'email_forgot_password_complete'	=> 'forgot_password_reset_link.tpl',
 
 	/*
 	 | -------------------------------------------------------------------------

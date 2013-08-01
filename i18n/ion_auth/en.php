@@ -150,17 +150,26 @@ return array(
 	'reset_password_validation_new_password_label'			=> 'New Password',
 	'reset_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
 
-		// Activation Email
-	'Activate account for :identity'	=> 'Activate account for :identity',
-	'Please click this link to :activate'	=> 'Please click this link to :activate.',
-	'Activate Your Account'		=> 'Activate Your Account',
+	// Activation Email
+	'Activate account for:'	=> 'Activate account for:',
+	'Please click this link to'	=> 'Please click this link to',
+	'activate your account.'		=> 'activate your account.',
 	
-	// Forgot Password Email
-	'Reset Password for :identity'		=> 'Reset Password for :identity',
-	'Please click this link to :reset_password'	=> 'Please click this link to :reset_password.',
-	'Reset Your Password'		=> 'Reset Your Password',
+	// Forgot Password Email link to reset
+	'Reset password for user:'		=> 'Reset password for user:',
+	'Please click this link to:'	=> 'Please click this link to:',
+	'reset your password'		=> 'reset your password.',
 	
-	// New Password Email
-	'New Password for :identity'	=> 'New Password for :identity',
-	'Your password has been reset to: :new_password'	=> 'Your password has been reset to: :new_password',
+	// Forgot Password Email new / New Password Email
+	'New Password for user:'	=> 'New Password for user:',
+	'Your password has been reset to:'	=> 'Your password has been reset to:',
+	
+	// New User Password Email
+	'Password for the new user:' => 'Password for the new user:',
+	'Welcome to :site_name, :identity!' => 'Welcome to :site_name, :identity!',
+	'Password to your account is:' => 'Password to your account is:',
+	
+	// Common for passwords that displayed in Email
+	'You can change the password on your profile page when logged into your account'
+		=> 'You can change the password on your profile page when logged into your account.',
 );
