@@ -148,7 +148,7 @@ return array(
 
 	/*
 	 | -------------------------------------------------------------------------
-	 | Use forgot_password_compltet() to generate password?
+	 | Use forgot_password_complete() to generate password?
 	 | -------------------------------------------------------------------------
 	 | Default: activate.tpl.php
 	 */
