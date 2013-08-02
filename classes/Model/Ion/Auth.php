@@ -906,8 +906,6 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('pre_register');
 
-		$manual_activation = $this->config->get('manual_activation');
-
 		if ($this->identity_column == 'email' AND $this->row_exists($this->tables['users'], 'email', $email))
 		{
 			$this->set_error('account_creation_duplicate_email');
@@ -935,6 +933,8 @@ class Model_Ion_Auth extends Model_Common
 		$salt       = $this->store_salt ? $this->salt() : FALSE;
 		$password   = $this->hash_password($password, $salt);
 
+		$active = (int) ($this->config->get('manual_activation') === FALSE);
+
 		$cms = 0;
 		if (count(array_intersect($this->manager_groups(), $groups)) > 0)
 		{
@@ -952,8 +952,7 @@ class Model_Ion_Auth extends Model_Common
 		    'email'      => $email,
 		    'ip_address' => $this->_ip_address(),
 		    'created_on' => time(),
-		    //'last_login' => time(),
-		    'active'     => (int) $manual_activation === FALSE,
+		    'active'     => $active,
 			'cms'        => $cms
 		);
 
