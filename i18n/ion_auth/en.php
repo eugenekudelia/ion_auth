@@ -19,7 +19,7 @@
 return array(
 
 	//
-	'char' => 'cahrs',
+	'characters' => 'cahrs',
 
 	// Errors
 	'error_csrf' => 'This form post did not pass our security checks.',
