@@ -6,10 +6,9 @@
 * 		  ben.edmunds@gmail.com
 *         @benedmunds
 *
-* Author: Daniel Davis
-*         @ourmaninjapan
+* Author: Eugene Kudelia
 *
-* Location: http://github.com/benedmunds/ion_auth/
+* Location: https://github.com/eugenekudelia/ion_auth
 *
 * Created:  03.09.2013
 *
@@ -18,148 +17,178 @@
 */
 return array(
 
-	//
-	'characters' => 'знаков',
+	// General
+	'Submit'		=> 'Сохранить',
+	'Send'			=> 'Отправить',
+	'characters'	=> 'знаков',
+	'default'		=> 'по умолчанию',
+	'Yes'			=> 'Да',
+	'No'			=> 'Нет',
+	'Display name'	=> 'Отображаемое имя',
+	'Required'		=> 'Обязательно',
+	'User'			=> 'Пользователь',
+	'Profile'		=> 'Профиль',
+	'Permissions'	=> 'Права доступа',
+	'Groups'		=> 'Группы',
+	'Gender'		=> 'Пол',
+	'New Account'	=> 'Новый аккаунт',
+
+	'Active'		=> 'Активный',
+	'Inactive'		=> 'Неактивный',
+	'Activate'		=> 'Активировать',
+	'Deactivate'	=> 'Деактивтровать',
+	'Delete'		=> 'Удалить',
+	'Restricted access'	=> 'Ограниченный доступ',
+	'You’re going to delete'	=> 'Вы собитраетесь удалить',
+	'account'		=> 'аккаунт',
+	''	=> '',
+	'This cannot be undone.'	=> 'Это действие нельзя отменить.',
+	''	=> '',
 
 	// Errors
-	'error_csrf' => 'This form post did not pass our security checks.',
+	'error_csrf' => 'Запрошенные данные не прошли проверку на безопасность',
+
+	// Password general
+	'Password'						=> 'Пароль',
+	'Change password'				=> 'Сменить пароль',
+	'New password'					=> 'Новый пароль',
+	'Confirm password'				=> 'Подтвердите пароль',
+	'Password notification method'	=> 'Способ оповещения',
+	'Show the password on screen'	=> 'Показать пароль на экране',
+	'Send the password by email'	=> 'Отправить по электронной почте',
+	'Forgot your password?'			=> 'Забыли пароль?',
+
+	// Login / Register / Edit User / Profile
+	'Login'			=> 'Вход',
+	'Email'			=> 'Email',
+	'hint_email'	=> 'Не отображается публично',
+	'Username'		=> 'Имя пользователя',
+	'Belongs to Groups:'	=> 'Принадлежность к группам:',
+	'hint_display_name'		=> 'Если не указано, будет отображаться Имя пользователя',
 
 	// Login
-	'login_heading'			=> 'Login',
-	'login_subheading'		=> 'Please login with your email/username and password below.',
-	'login_identity_label'	=> 'Email/Username:',
-	'login_password_label'	=> 'Password:',
-	'login_remember_label'	=> 'Remember Me:',
-	'login_submit_btn'		=> 'Login',
-	'login_forgot_password'	=> 'Forgot your password?',
+	'login_explain :identity'	=> 'Для авторизации введите свои :identity и пароль.',
+	'Log in'		=> 'Войти',
+	'Remember me'	=> 'Запомнить меня',
+	'Not registered yet?'					=> 'Нет аккаунта?',
+	'Not registered? Join now &#58;&#41;'	=> 'Нет аккаунта? Присоединяйтесь &#58;&#41;',
 
-	// Index
-	'index_heading'				=> 'Users',
-	'index_subheading'			=> 'Below is a list of the users.',
-	'index_fname_th'			=> 'First Name',
-	'index_lname_th'			=> 'Last Name',
-	'index_email_th'			=> 'Email',
-	'index_groups_th'			=> 'Groups',
-	'index_status_th'			=> 'Status',
-	'index_action_th'			=> 'Action',
-	'index_active_link'			=> 'Active',
-	'index_inactive_link'		=> 'Inactive',
-	'index_create_user_link'	=> 'Create a new user',
-	'index_create_group_link'	=> 'Create a new group',
-
-	// Deactivate User
-	'deactivate_heading'					=> 'Deactivate User',
-	'deactivate_subheading'					=> 'Are you sure you want to deactivate the user \'%s\'',
-	'deactivate_confirm_y_label'			=> 'Yes:',
-	'deactivate_confirm_n_label'			=> 'No:',
-	'deactivate_submit_btn'					=> 'Submit',
-	'deactivate_validation_confirm_label'	=> 'confirmation',
-	'deactivate_validation_user_id_label'	=> 'user ID',
+	// Register
+	'Register'		=> 'Регистрация',
+	'Registration'	=> 'Регистрация',
+	'Join the'		=> 'Присоединяйтесь к',
+	'hint_trusted_email'	=> 'Используйте только доверенный Email!',
+	'Send me my password by email'	=> 'Отправить пароль на мой Email',
 
 	// Create User
-	'create_user_heading'							=> 'Create User',
-	'create_user_subheading'						=> 'Please enter the users information below.',
-	'create_user_fname_label'						=> 'First Name:',
-	'create_user_lname_label'						=> 'Last Name:',
-	'create_user_company_label'						=> 'Company Name:',
-	'create_user_email_label'						=> 'Email:',
-	'create_user_phone_label'						=> 'Phone:',
-	'create_user_password_label'					=> 'Password:',
-	'create_user_password_confirm_label'			=> 'Confirm Password:',
-	'create_user_submit_btn'						=> 'Create User',
-	'create_user_validation_fname_label'			=> 'First Name',
-	'create_user_validation_lname_label'			=> 'Last Name',
-	'create_user_validation_email_label'			=> 'Email Address',
-	'create_user_validation_phone1_label'			=> 'First Part of Phone',
-	'create_user_validation_phone2_label'			=> 'Second Part of Phone',
-	'create_user_validation_phone3_label'			=> 'Third Part of Phone',
-	'create_user_validation_company_label'			=> 'Company Name',
-	'create_user_validation_password_label'			=> 'Password',
-	'create_user_validation_password_confirm_label'	=> 'Password Confirmation',
+	'Create User Account'	=> 'Новый аккаунт',
 
 	// Edit User
-	'edit_user_heading'								=> 'Edit User',
-	'edit_user_subheading'							=> 'Please enter the users information below.',
-	'edit_user_fname_label'							=> 'First Name:',
-	'edit_user_lname_label'							=> 'Last Name:',
-	'edit_user_company_label'						=> 'Company Name:',
-	'edit_user_email_label'							=> 'Email:',
-	'edit_user_phone_label'							=> 'Phone:',
-	'edit_user_password_label'						=> 'Password: (if changing password)',
-	'edit_user_password_confirm_label'				=> 'Confirm Password: (if changing password)',
-	'edit_user_groups_heading'						=> 'Member of groups',
-	'edit_user_submit_btn'							=> 'Save User',
-	'edit_user_validation_fname_label'				=> 'First Name',
-	'edit_user_validation_lname_label'				=> 'Last Name',
-	'edit_user_validation_email_label'				=> 'Email Address',
-	'edit_user_validation_phone1_label'				=> 'First Part of Phone',
-	'edit_user_validation_phone2_label'				=> 'Second Part of Phone',
-	'edit_user_validation_phone3_label'				=> 'Third Part of Phone',
-	'edit_user_validation_company_label'			=> 'Company Name',
-	'edit_user_validation_groups_label'				=> 'Groups',
-	'edit_user_validation_password_label'			=> 'Password',
-	'edit_user_validation_password_confirm_label'	=> 'Password Confirmation',
+	'User account does not exist'	=> 'Аккаунт не найден',
+	'You have no permission to edit account: :username'
+		=> 'Вы не можете редактировать аккаунт: :username',
+	
+	'User removed from groups (id): :groups'
+		=> 'Пользователь удален из групп (id): :groups',
+	'Error while attempt to remove user from groups (id): :groups'
+		=> 'Ошибка при попытке удаления пользователя из групп (id): :groups',
+	'User added to groups (id): :groups'
+		=> 'Пользователь включен в группы (id): :groups',
+	'Error while attempt to add user to groups (id): :groups'
+		=> 'Ошибка при попытке включения пользователя в группы (id): :groups',
+	
+	'Edit User Account'	=> 'Редактировать аккаунт',
 
-	// Create Group
-	'create_group_title'					=> 'Create Group',
-	'create_group_heading'					=> 'Create Group',
-	'create_group_subheading'				=> 'Please enter the group information below.',
-	'create_group_name_label'				=> 'Group Name:',
-	'create_group_desc_label'				=> 'Description:',
-	'create_group_submit_btn'				=> 'Create Group',
-	'create_group_validation_name_label'	=> 'Group Name',
-	'create_group_validation_desc_label'	=> 'Description',
+	'Change Password:' => 'Сменить пароль:',
+	'Account statistics:'	=> 'Статистика аккаунта:',
+	'Created on'	=> 'Время создания',
+	'Last login'	=> 'Последний вход',
+	'Login count'	=> 'Всего входов',
+	// Edit User - Groups
+	'Member of Groups:'	=> 'Участник групп:',
+	// Edit User - Permissions
+	'Access to resources / actions:'	=> 'Доступ к ресурсам / действиям:',
+	'Member of the Administrator group has got full access.'
+		=> 'Участник группы Administrator обладает полным доступом.',
+	// Edit User - Profile
+	'Display Name'	=> 'Отображаемое имя',
+	'(Full) Name'	=> '(Полное) имя',
+	'hint_full_name'	=> 'Не отображается. Только для контактов и рассылок.',
+	'Male'			=> 'Мужской',
+	'Female'		=> 'Женский',
+	'Not Telling'	=> 'Не указан',
+	'Public Email'	=> 'Открытый Email',
+	'hint_public_email'	=> 'Будет виден всем',
+	'Website'		=> 'Веб-сайт',
+	'Date of birth'	=> 'Дата рождения',
+	'Locality / Contact info'	=> 'Местоположение / контакты',
+	'Additional info'	=> 'Дополнительно',
+	''	=> '',
+	''	=> '',
+	''	=> '',
 
-	// Edit Group
-	'edit_group_title'					=> 'Edit Group',
-	'edit_group_saved'					=> 'Group Saved',
-	'edit_group_heading'				=> 'Edit Group',
-	'edit_group_subheading' 			=> 'Please enter the group information below.',
-	'edit_group_name_label'				=> 'Group Name:',
-	'edit_group_desc_label'				=> 'Description:',
-	'edit_group_submit_btn'				=> 'Save Group',
-	'edit_group_validation_name_label'	=> 'Group Name',
-	'edit_group_validation_desc_label'	=> 'Description',
+	// Edit User Profile
 
-	// Change Password
-	'change_password_heading'								=> 'Change Password',
-	'change_password_old_password_label'					=> 'Old Password:',
-	'change_password_new_password_label'					=> 'New Password (at least %s characters long):',
-	'change_password_new_password_confirm_label'			=> 'Confirm New Password:',
-	'change_password_submit_btn'							=> 'Change',
-	'change_password_validation_old_password_label'			=> 'Old Password',
-	'change_password_validation_new_password_label'			=> 'New Password',
-	'change_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
+	// Change password
+	'Change Password' => 'Сменить пароль',
+	'Old password' => 'Старый пароль',
+	'Confirm new password'	=> 'Подтвердить новый пароль',
+	'Show the new password on screen' => 'Показать новый пароль на экране',
+	'Send the new password by email' => 'Отправить по электронной почте',
+	'Change' => 'Сменить',
 
 	// Forgot Password
-	'forgot_password_heading'					=> 'Forgot Password',
-	'forgot_password_subheading'				=> 'Please enter your %s so we can send you an email to reset your password.',
-	'forgot_password_email_label'				=> '%s:',
-	'forgot_password_submit_btn'				=> 'Submit',
-	'forgot_password_validation_email_label'	=> 'Email Address',
-	'forgot_password_username_identity_label'	=> 'Username',
-	'forgot_password_email_identity_label'		=> 'Email',
+	'Forgot Your Password?'	=> 'Забыли пароль?',
+	'info_forgot_password'	=> 'Введите адрес эл. почты своего аккаунта, чтобы мы могли отправить вам данные для восстановления пароля.',
+	'Account email'				=> 'Email аккаунта',
 
 	// Reset Password
-	'reset_password_heading'								=> 'Reset Password',
-	'reset_password_new_password_label'						=> 'New Password (at least %s characters long):',
-	'reset_password_new_password_confirm_label'				=> 'Confirm New Password:',
-	'reset_password_submit_btn'								=> 'Submit',
-	'reset_password_validation_new_password_label'			=> 'New Password',
-	'reset_password_validation_new_password_confirm_label'	=> 'Confirm New Password',
+	'Reset Password'	=> 'Восстановить пароль',
 
+	// User list 
+	'User List'	=> 'Список пользователей',
+	'User filter'	=> 'Фильтры пользователей',
+	'No filter'		=> 'Без фильтра',
+	'by status'	=> 'статус',
+	'by group'	=> 'группа',
+	'all managers / users'	=> 'менеджеры / посетители',
+	'All managers'	=> 'Все менеджеры',
+	'All frontend users'	=> 'Все посетители',
+	''	=> '',
+	''	=> '',
+	''	=> '',
+	''	=> '',
+
+	// Groups / Permissions
+	'Groups and Permissions'	=> 'Группы и права доступа',
+	'Users Groups'	=> 'Группы пользователя',
+	'Group Name'	=> 'Название группы',
+	'Group'			=> 'Группа',
+	'CMS Access'	=> 'Доступ к CMS',
+	'The :name group has full access.'	=> 'Группа :name имеет полный доступ.',
+	'Restricted access to editing.'		=> 'Restricted access to editing.',
+	'No permissions yet.'				=> 'Права доступа не определены.',
+	'rename'	=> 'переименовать',
+	'Delete Group'	=> 'Удалить группу',
+	'Core Group'	=> 'Системная группа',
+	'Create Group'	=> 'Создать группу',
+	'CMS access'	=> 'Доступ к CMS',
+	''	=> '',
+
+	// Email templates
+	
 	// Activation Email
 	'Activate account for:'	=> 'Активация аккаунта пользователя',
 	'Please click this link to'	=> 'Нажмите на ссылку для',
 	'activate your account.'		=> 'активации вашего аккаунта.',
 	
 	// Forgot Password Email link to reset
-	'Reset password for user:'		=> 'Обновление пароля пользователя:',
+	'Reset password for user:'		=> 'Восстановление пароля пользователя:',
 	'Please click this link to:'	=> 'Перейдите по ссылке для',
-	'reset your password'		=> 'обновления вашего пароля.',
+	'reset your password'		=> 'восстановления вашего пароля.',
 	
 	// Forgot Password Email new / New Password Email
-	'New Password for user:'	=> 'Обновление пароля пользователя:',
+	'New Password for user:'	=> 'Восстановление пароля пользователя:',
 	'Your password has been reset to:'	=> 'Ваш новый пароль:',
 	
 	// New User Password Email
