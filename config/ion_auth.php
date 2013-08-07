@@ -200,9 +200,9 @@ return array(
 	 | -------------------------------------------------------------------------
 	 | New User Password Email Template
      | -------------------------------------------------------------------------
-     | Default : new_user_password.tpl.php
+     | Default : new_user_details.tpl.php
 	 */
-	'email_new_user_password'	=> 'new_user_password.tpl',
+	'email_new_user_details'	=> 'new_user_details.tpl',
 
 	/*
 	 | -------------------------------------------------------------------------

@@ -197,9 +197,9 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_complete'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
 				$this->email->to($user->email);
-				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_forgotten_password_subject'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
 				$this->email->message($message);
 
 				if ($this->email->send())
@@ -218,8 +218,9 @@ class Ion_Auth
 		elseif ($switch === TRUE AND ($new_password = $this->ion_auth_model->forgotten_password_complete($code, $user->salt)))
 		{
 			$data = array(
-				'identity'     => $user->{$this->_config()->get('identity')},
-				'new_password' => $new_password
+				'identity'		=> $user->{$this->_config()->get('identity')},
+				'new_password'	=> $new_password,
+				'login_link'	=> HTML::anchor('login', NULL, NULL, 'http')
 			);
 			if ( ! $this->use_builtin_email)
 			{
@@ -233,9 +234,9 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_new'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
 				$this->email->to($user->email);
-				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_forgotten_password_complete_subject'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
 				$this->email->message($message);
 
 				if ($this->email->send())
@@ -300,32 +301,35 @@ class Ion_Auth
 	 * @return bool
 	 * @author Eugene Kudelia
 	 */
-	function new_password_email($identity, $new_password, $email, $new_user = FALSE) {
-			
+	function new_password_email($username, $password, $email, $new_user = FALSE)
+	{
+		$site_name = $this->_config()->get('site_title');
+
 		$data = array(
-			'identity'     => $identity,
-			'new_password' => $new_password
+			'username'	=> $username,
+			'password'	=> $password,
+			'email'		=> $email	
 		);
 		if ($new_user)
 		{
-			$data['site_name'] = $this->_config()->get('site_title');
-			$tpl = 'email_new_user_password';
-			$subject = 'email_new_user_password_subject';
+			$tpl = 'email_new_user_details';
+			$subject = ion__('Welcome to :site_name!', array(':site_name' => $site_name));
+			$data['site_name'] = $site_name;
 		}
 		else
 		{
 			$tpl = 'email_new_password';
-			$subject = 'email_new_password_subject';
+			$subject = '['.$site_name.'] '.ion__('Notice of the new password');
 		}
 
-		$tpl = $new_user ? 'email_new_user_password' : 'email_new_password';
+		$tpl = $new_user ? 'email_new_user_details' : 'email_new_password';
 		$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get($tpl), $data)->render();
 		
 		$this->email->clear();
 		$this->email->set_newline("\r\n");
-		$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
+		$this->email->from($this->_config()->get('admin_email'), $site_name.' '.ion__('Mailer'));
 		$this->email->to($email);
-		$this->email->subject($this->_config()->get('site_title').' - '.ion__($subject));
+		$this->email->subject($subject);
 		$this->email->message($message);
 
 		if ($this->email->send())
@@ -398,7 +402,7 @@ class Ion_Auth
 				'identity'   => $user->{$identity},
 				'id'         => $user->id,
 				'email'      => $email,
-				'activation' => $activation_code,
+				'activation_code' => $activation_code,
 			);
 			if ( ! $this->use_builtin_email)
 			{
@@ -412,9 +416,9 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_activate'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
 				$this->email->to($email);
-				$this->email->subject($this->_config()->get('site_title').' - '.ion__('email_activation_subject'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Account Activation'));
 				$this->email->message($message);
 
 				if ($this->email->send() == TRUE)

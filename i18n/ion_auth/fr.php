@@ -77,7 +77,7 @@ return array(
 	'Register'		=> 'Registrater',
 	'Registration'	=> 'Registration',
 	'Join the'		=> 'Join the',
-	'hint_trusted_email'	=> 'Use only trusted Email!',
+	'hint_trusted_email'	=> 'Use only trusted Email',
 	'Send me my password by email'	=> 'Send me my password by email',
 
 	// Create User
@@ -111,19 +111,19 @@ return array(
 	'Member of the Administrator group has got full access.'
 		=> 'Member of the Administrator group has got full access.',
 	// Edit User - Profile
-	'Display Name'	=> 'Display Name',
-	'(Full) Name'	=> '(Full) Name',
+	'Display Name'		=> 'Display Name',
+	'(Full) Name'		=> '(Full) Name',
 	'hint_full_name'	=> 'Not displayed. Only for contacts and newsletters.',
-	'Male'			=> 'Male',
-	'Female'		=> 'Female',
-	'Not Telling'	=> 'Not Telling',
-	'Public Email'	=> 'Public Email',
+	'Male'				=> 'Male',
+	'Female'			=> 'Female',
+	'Not Telling'		=> 'Not Telling',
+	'Public Email'		=> 'Public Email',
 	'hint_public_email'	=> 'Will be visible to all',
-	'Website'		=> 'Website',
-	'Date of birth'	=> 'Date of birth',
+	'Website'			=> 'Website',
+	'Date of birth'		=> 'Date of birth',
 	'Locality / Contact info'	=> 'Locality / Contact info',
 	'Additional info'	=> 'Additional info',
-	''	=> '',
+	'Avatar:'			=> 'Avatar:',
 	''	=> '',
 	''	=> '',
 
@@ -175,27 +175,35 @@ return array(
 	''	=> '',
 
 	// Email templates
+	'Mailer'	=> 'Mailer',
 	
 	// Activation Email
-	'Activate account for:'		=> 'Activate account for:',
+	'Account Activation'		=> 'Account Activation',
+	'Activate user account'		=> 'Activate user account',
 	'Please click this link to'	=> 'Please click this link to',
 	'activate your account.'	=> 'activate your account.',
 	
-	// Forgot Password Email link to reset
-	'Reset password for user:'	=> 'Reset password for user:',
+	// Forgotten Password Email link to reset
+	'Reset password for user'	=> 'Reset password for user',
 	'Please click this link to'	=> 'Please click this link to',
 	'reset your password'		=> 'reset your password.',
 	
-	// Forgot Password Email new / New Password Email
-	'New Password for user:'			=> 'New Password for user:',
-	'Your password has been reset to:'	=> 'Your password has been reset to:',
+	// Forgotten Password Email / New Password Email
+	'Password for user'	=> 'Password for user',
+	// Changed
+	'Notice of the new password'		=> 'Notice of the new password',
+	'Your password has been changed.'	=> 'Your password has been changed.',
+	// Forgotten
+	'Your forgotten password has been reset.'	=> 'Your forgotten password has been reset.',
 	
-	// New User Password Email
-	'Password for the new user:'		=> 'Password for the new user:',
-	'Welcome to :site_name, :identity!'	=> 'Welcome to :site_name, :identity!',
-	'Password to your account is:'		=> 'Password to your account is:',
+	// New User Details Email
+	'Welcome to :site_name!'	=> 'Welcome to :site_name!',
+	'Thank you for registering on :site_link. Your account details are:'
+		=> 'Thank you for registering on :site_link. Your account details are:',
 	
-	// Common for passwords that displayed in Email
-	'You can change the password on your profile page when logged into your account'
-		=> 'You can change the password on your profile page when logged into your account.',
+	// Common for emails
+	'Reset the forgotten password'	=> 'Reset the forgotten password',
+	'Login page: :login_link.'		=> 'Login page: :login_link.',
+	'You can change the password on your profile page when logged in.'
+		=> 'You can change the password on your profile page when logged in.',
 );

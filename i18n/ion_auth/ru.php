@@ -77,7 +77,7 @@ return array(
 	'Register'		=> 'Регистрация',
 	'Registration'	=> 'Регистрация',
 	'Join the'		=> 'Присоединяйтесь к',
-	'hint_trusted_email'	=> 'Используйте только доверенный Email!',
+	'hint_trusted_email'	=> 'Используйте только доверенный Email',
 	'Send me my password by email'	=> 'Отправить пароль на мой Email',
 
 	// Create User
@@ -123,7 +123,7 @@ return array(
 	'Date of birth'	=> 'Дата рождения',
 	'Locality / Contact info'	=> 'Местоположение / контакты',
 	'Additional info'	=> 'Дополнительно',
-	''	=> '',
+	'Avatar:'			=> 'Аватар:',
 	''	=> '',
 	''	=> '',
 
@@ -176,27 +176,35 @@ return array(
 	''	=> '',
 
 	// Email templates
+	'Mailer'	=> 'рассылка',
 	
 	// Activation Email
-	'Activate account for:'	=> 'Активация аккаунта пользователя',
+	'Account Activation'		=> 'Активация аккаунта',
+	'Activate user account'		=> 'Активация аккаунта пользователя',
 	'Please click this link to'	=> 'Нажмите на ссылку для',
-	'activate your account.'		=> 'активации вашего аккаунта.',
+	'activate your account.'	=> 'активации вашего аккаунта.',
 	
-	// Forgot Password Email link to reset
-	'Reset password for user:'		=> 'Восстановление пароля пользователя:',
-	'Please click this link to:'	=> 'Перейдите по ссылке для',
+	// Forgotten Password Email link to reset
+	'Reset password for user'	=> 'Восстановление пароля пользователя',
+	'Please click this link to'	=> 'Перейдите по ссылке для',
 	'reset your password'		=> 'восстановления вашего пароля.',
 	
-	// Forgot Password Email new / New Password Email
-	'New Password for user:'	=> 'Восстановление пароля пользователя:',
-	'Your password has been reset to:'	=> 'Ваш новый пароль:',
+	// Forgotten Password Email / New Password Email
+	'Password for user'	=> 'Пароль для пользователя',
+	// Changed
+	'Notice of the new password'		=> 'Уведомление о новом пароле',
+	'Your password has been changed.'	=> 'Ваш пароль был изменен.',
+	// Forgotten
+	'Your forgotten password has been reset.'	=> 'Ваш забытый пароль был сброшен.',
 	
-	// New User Password Email
-	'Password for the new user:' => 'Пароль нового пользователяв:',
-	'Welcome to :site_name, :identity!' => 'Добро пожаловать на :site_name, :identity!',
-	'Password to your account is:' => 'Ваш пароль:',
+	// New User Details Email
+	'Welcome to :site_name'		=> 'Добро пожаловать на :site_name',
+	'Thank you for registering on :site_link. Your account details are:'
+		=> 'Спасибо за регистрацию на :site_link. Детали вашего аккаунта:',
 	
-	// Common for passwords that displayed in Email
-	'You can change the password on your profile page when logged into your account'
-		=> 'Вы можете изменить пароль на странице профиля, войдя в свой аккаунт.',
+	// Common for emails
+	'Reset the forgotten password'	=> 'Восстановление забытого пароля',
+	'Login page: :login_link.'	=> 'Страница авторизации: :login_link.',
+	'You can change the password on your profile page when logged in.'
+		=> 'Вы можете изменить пароль на странице профиля, войдя в систему.',
 );
