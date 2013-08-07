@@ -74,7 +74,7 @@ return array(
 	'Not registered? Join now &#58;&#41;'	=> 'Not registered? Join now &#58;&#41;',
 
 	// Register
-	'Register'		=> 'Registrater',
+	'Register'		=> 'Register',
 	'Registration'	=> 'Registration',
 	'Join the'		=> 'Join the',
 	'hint_trusted_email'	=> 'Use only trusted Email',
@@ -181,7 +181,7 @@ return array(
 	'Account Activation'		=> 'Account Activation',
 	'Activate user account'		=> 'Activate user account',
 	'Please click this link to'	=> 'Please click this link to',
-	'activate your account.'	=> 'activate your account.',
+	'activate your account'		=> 'activate your account',
 	
 	// Forgotten Password Email link to reset
 	'Reset password for user'	=> 'Reset password for user',
@@ -202,8 +202,8 @@ return array(
 		=> 'Thank you for registering on :site_link. Your account details are:',
 	
 	// Common for emails
+	'Login page'	=> 'Login page',
 	'Reset the forgotten password'	=> 'Reset the forgotten password',
-	'Login page: :login_link.'	=> 'Login page: :login_link.',
 	'You can change the password on your profile page when logged in.'
 		=> 'You can change the password on your profile page when logged in.',
 );

@@ -182,7 +182,7 @@ return array(
 	'Account Activation'		=> 'Активация аккаунта',
 	'Activate user account'		=> 'Активация аккаунта пользователя',
 	'Please click this link to'	=> 'Нажмите на ссылку для',
-	'activate your account.'	=> 'активации вашего аккаунта.',
+	'activate your account'		=> 'активации вашего аккаунта',
 	
 	// Forgotten Password Email link to reset
 	'Reset password for user'	=> 'Восстановление пароля пользователя',
@@ -203,8 +203,8 @@ return array(
 		=> 'Спасибо за регистрацию на :site_link. Детали вашего аккаунта:',
 	
 	// Common for emails
+	'Login page'	=> 'Страница авторизации',
 	'Reset the forgotten password'	=> 'Восстановление забытого пароля',
-	'Login page: :login_link.'	=> 'Страница авторизации: :login_link.',
 	'You can change the password on your profile page when logged in.'
 		=> 'Вы можете изменить пароль на странице профиля, войдя в систему.',
 );

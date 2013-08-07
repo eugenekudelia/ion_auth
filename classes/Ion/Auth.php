@@ -197,7 +197,7 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_complete'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($user->email);
 				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
 				$this->email->message($message);
@@ -234,7 +234,7 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_forgot_password_new'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($user->email);
 				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
 				$this->email->message($message);
@@ -307,8 +307,7 @@ class Ion_Auth
 
 		$data = array(
 			'username'	=> $username,
-			'password'	=> $password,
-			'email'		=> $email	
+			'password'	=> $password
 		);
 		if ($new_user)
 		{
@@ -327,19 +326,27 @@ class Ion_Auth
 		
 		$this->email->clear();
 		$this->email->set_newline("\r\n");
-		$this->email->from($this->_config()->get('admin_email'), $site_name.' '.ion__('Mailer'));
+		$this->email->from($this->_config()->get('admin_email'), $site_name);
 		$this->email->to($email);
 		$this->email->subject($subject);
 		$this->email->message($message);
 
 		if ($this->email->send())
 		{
-			$this->set_message('new_password_email_successful');
+			$text = $new_user
+				? 'new_user_email_successful'
+				: 'new_password_email_successful';
+
+			$this->set_message($text);
 			return TRUE;
 		}
 		else
 		{
-			$this->set_error('new_password email_unsuccessful');
+			$text = $new_user
+				? 'new_user_email_unsuccessful'
+				: 'new_password_email_unsuccessful';
+
+			$this->set_error($text);
 			return FALSE;
 		}
 	}
@@ -416,7 +423,7 @@ class Ion_Auth
 				$message = View::factory('ion_auth::'.$this->_config()->get('email_templates').$this->_config()->get('email_activate'), $data)->render();
 
 				$this->email->clear();
-				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title').' '.ion__('Mailer'));
+				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($email);
 				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Account Activation'));
 				$this->email->message($message);
