@@ -172,7 +172,7 @@ class Ion_Auth
 
 		if ($query->rows_count() === 0)
 		{
-			$this->set_error('forgot_password_unsuccessful');
+			$this->set_error('forgot_password_user_not_found');
 			return FALSE;
 		}
 
@@ -215,11 +215,11 @@ class Ion_Auth
 			}
 		}
 		// added functionality of forgotten_password_complete()
-		elseif ($switch === TRUE AND ($new_password = $this->ion_auth_model->forgotten_password_complete($code, $user->salt)))
+		elseif ($switch === TRUE AND ($password = $this->ion_auth_model->forgotten_password_complete($code, $user->salt)))
 		{
 			$data = array(
 				'identity'		=> $user->{$this->_config()->get('identity')},
-				'new_password'	=> $new_password,
+				'password'		=> $password,
 				'login_link'	=> HTML::anchor('login', NULL, NULL, 'http')
 			);
 			if ( ! $this->use_builtin_email)
@@ -319,6 +319,7 @@ class Ion_Auth
 		{
 			$tpl = 'email_new_password';
 			$subject = '['.$site_name.'] '.ion__('Notice of the new password', NULL, 'email');
+			$data['identity'] = $this->_config()->get('identity') == 'email' ? $email : $username;
 		}
 
 		$tpl = $new_user ? 'email_new_user_details' : 'email_new_password';

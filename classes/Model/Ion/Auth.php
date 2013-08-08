@@ -845,6 +845,7 @@ class Model_Ion_Auth extends Model_Common
 		$data = array(
 		    'password'                => $this->hash_password($password, $salt),
 		    'forgotten_password_code' => NULL,
+		    'forgotten_password_time' => NULL,
 		    'active'                  => 1,
 		);
 
