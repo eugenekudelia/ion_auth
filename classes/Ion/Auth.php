@@ -199,7 +199,7 @@ class Ion_Auth
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($user->email);
-				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password', NULL, 'email'));
 				$this->email->message($message);
 
 				if ($this->email->send())
@@ -236,7 +236,7 @@ class Ion_Auth
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($user->email);
-				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Reset the forgotten password', NULL, 'email'));
 				$this->email->message($message);
 
 				if ($this->email->send())
@@ -312,13 +312,13 @@ class Ion_Auth
 		if ($new_user)
 		{
 			$tpl = 'email_new_user_details';
-			$subject = ion__('Welcome to :site_name!', array(':site_name' => $site_name));
+			$subject = ion__('Welcome to :site_name!', array(':site_name' => $site_name), 'email');
 			$data['site_name'] = $site_name;
 		}
 		else
 		{
 			$tpl = 'email_new_password';
-			$subject = '['.$site_name.'] '.ion__('Notice of the new password');
+			$subject = '['.$site_name.'] '.ion__('Notice of the new password', NULL, 'email');
 		}
 
 		$tpl = $new_user ? 'email_new_user_details' : 'email_new_password';
@@ -425,7 +425,7 @@ class Ion_Auth
 				$this->email->clear();
 				$this->email->from($this->_config()->get('admin_email'), $this->_config()->get('site_title'));
 				$this->email->to($email);
-				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Account Activation'));
+				$this->email->subject('['.$this->_config()->get('site_title').'] '.ion__('Account Activation', NULL, 'email'));
 				$this->email->message($message);
 
 				if ($this->email->send() == TRUE)
