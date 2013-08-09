@@ -393,7 +393,7 @@ class Ion_Auth
 				return FALSE;
 			}
 
-			$deactivate = $this->ion_auth_model->deactivate($id);
+			$deactivate = $this->ion_auth_model->deactivate($id, $cms);
 
 			if ( ! $deactivate)
 			{

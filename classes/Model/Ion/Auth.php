@@ -492,15 +492,9 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function deactivate($id = NULL)
+	public function deactivate($id, $cms = TRUE)
 	{
 		$this->trigger_events('deactivate');
-
-		if ( ! isset($id))
-		{
-			$this->set_error('deactivate_unsuccessful');
-			return FALSE;
-		}
 
 		$activation_code       = sha1(md5(microtime()));
 		$this->activation_code = $activation_code;
@@ -520,7 +514,10 @@ class Model_Ion_Auth extends Model_Common
 
 		if ($return = ($affected_rows === 1))
 		{
-			$this->set_message('deactivate_successful');
+			if ($cms)
+			{
+				$this->set_message('deactivate_successful');
+			}
 		}
 		else
 		{
