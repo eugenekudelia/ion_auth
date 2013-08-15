@@ -59,6 +59,7 @@ return array(
 	'Forgot your password?'			=> 'Forgot your password?',
 
 	// Login / Register / Create User / Edit User / Profile
+	'Auth'			=> 'Auth',
 	'Login'			=> 'Login',
 	'Email'			=> 'Email',
 	'hint_email'	=> 'Not displayed publicly',

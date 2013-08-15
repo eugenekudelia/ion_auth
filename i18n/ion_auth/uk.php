@@ -59,6 +59,7 @@ return array(
 	'Forgot your password?'			=> 'Забыли пароль?',
 
 	// Login / Register / Edit User / Profile
+	'Auth'			=> 'Аккаунт',
 	'Login'			=> 'Вход',
 	'Email'			=> 'Email',
 	'hint_email'	=> 'Не отображается публично',
