@@ -904,12 +904,13 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('pre_register');
 
+		$not_unique = $this->row_exists($this->tables['users'], 'username', $username);
 		if ($this->identity_column == 'email' AND $this->row_exists($this->tables['users'], 'email', $email))
 		{
 			$this->set_error('account_creation_duplicate_email');
 			return FALSE;
 		}
-		elseif ($this->identity_column == 'username' AND ($not_unique = $this->row_exists($this->tables['users'], 'username', $username)))
+		elseif ($this->identity_column == 'username' AND $not_unique)
 		{
 			$this->set_error('account_creation_duplicate_username');
 			return FALSE;
