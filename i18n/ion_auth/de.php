@@ -64,6 +64,7 @@ return array(
 	'Email'			=> 'Email',
 	'hint_email'	=> 'Not displayed publicly',
 	'Username'		=> 'Username',
+	'Read-only'		=> 'Read-only',
 	'Belongs to Groups:'	=> 'Belongs to Groups:',
 	'hint_display_name'		=> 'If not specified, the Username will be displayed',
 
