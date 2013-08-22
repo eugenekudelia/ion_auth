@@ -122,8 +122,8 @@ return array(
 	'max_username_length'       => 24,					// Maximum Allowed Length of Username
 	'min_password_length'       => 8,					// Minimum Required Length of Password
 	'max_password_length'       => 20,					// Maximum Allowed Length of Password
-	'old_password_required'		=> FALSE,				// Old password required when change password within CMS
-	'old_password_required_app'	=> TRUE,				// Old password required when change password within application
+	'old_password_required'		=> TRUE,				// Old password required when change password within application
+	'old_password_required_cms'	=> FALSE,				// Old password required when change password within CMS
 	'email_activation'          => FALSE,				// Email Activation for registration
 	'manual_activation'         => FALSE,				// Manual Activation for registration
 	'remember_users'            => TRUE, 				// Allow users to be remembered and enable auto-login
@@ -153,8 +153,8 @@ return array(
 	 | -------------------------------------------------------------------------
 	 | Default: activate.tpl.php
 	 */
-	'public_forgot_password_generate' => FALSE,
-	'cms_forgot_password_generate' => FALSE,
+	'forgot_password_generate'		=> FALSE,
+	'forgot_password_generate_cms'	=> FALSE,
 
 	/*
 	 | -------------------------------------------------------------------------
