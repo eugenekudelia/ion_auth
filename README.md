@@ -9,7 +9,7 @@ the code and added new features.
 This version drops any backwards compatibility and makes things even more 
 awesome then you could expect.
 
-###Adapted to work with Kohana framework v3.3
+###Adapted to work in Kohana framework v3.3
 by [Eugene Kudelia](http://jenweb.info)
 
 ##Documentation
