@@ -114,6 +114,9 @@ class Ion_Auth
 
 		$this->_cache_user_in_group =& $this->ion_auth_model->_cache_user_in_group;
 
+		// User has been deleted during current session?
+		$this->user_exists();
+
 		//auto-login the user if they are remembered
 		if ( ! $this->logged_in() AND Cookie::get('identity') AND Cookie::get('remember_code'))
 		{
@@ -455,6 +458,36 @@ class Ion_Auth
 		$this->ion_auth_model->trigger_events('logout');
 
 		//Destroy the session and restart with new session id
+		if ($this->_session_reset())
+		{
+			$this->set_message('logout_successful');
+			return TRUE;
+		}
+
+		$this->set_error('logout_unsuccessful');
+		return FALSE;
+	}
+
+	/**
+	 * Logged in user exists
+	 * or has been deleted during current session
+	 */
+	public function user_exists()
+	{
+		if ($this->logged_in() AND ! is_object($this->ion_auth_model->user()->row()))
+		{
+			$this->_session_reset();
+
+			Notice::set(ion__('Erm… looks like this user account does not exist.'), 'error');
+			HTTP::redirect('/');
+		}
+	}
+
+	/**
+	 * session reset
+	 */
+	protected function _session_reset()
+	{
 		if ($this->_session()->restart())
 		{
 			//delete the remember me cookies if they exist
@@ -466,12 +499,9 @@ class Ion_Auth
 			{
 				Cookie::delete('remember_code');
 			}
-		
-			$this->set_message('logout_successful');
 			return TRUE;
 		}
 
-		$this->set_error('logout_unsuccessful');
 		return FALSE;
 	}
 
