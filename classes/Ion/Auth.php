@@ -594,9 +594,9 @@ class Ion_Auth
 	 */
 	public function admin($default = FALSE)
 	{
-		if ($this->get_user_id())
+		if ($this->logged_in())
 		{
-			$user = $this->user()->row()->cms;
+			$user = is_object($this->user()->row()) ? $this->user()->row()->cms : NULL;
 			if (is_numeric($user))
 			{
 				return $default ? $user == 2 : $user > 0;
