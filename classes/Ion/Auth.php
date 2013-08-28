@@ -466,28 +466,6 @@ class Ion_Auth
 	}
 
 	/**
-	 * session reset
-	 */
-	public function session_reset()
-	{
-		if ($this->_session()->restart())
-		{
-			// delete the remember and identity cookies if they exist
-			if (Cookie::get('identity'))
-			{
-				Cookie::delete('identity');
-			}
-			if (Cookie::get('remember_code'))
-			{
-				Cookie::delete('remember_code');
-			}
-			return TRUE;
-		}
-
-		return FALSE;
-	}
-
-	/**
 	 * logged_in
 	 *
 	 * @return bool

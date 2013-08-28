@@ -615,6 +615,8 @@ class Model_Ion_Auth extends Model_Common
 
 		if ($return = ($affected_rows === 1))
 		{
+			$this->session_reset();
+
 			$this->trigger_events(array('post_change_password', 'post_change_password_successful'));
 			$this->set_message('password_change_successful');
 		}
@@ -2094,6 +2096,31 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('post_set_session');
 
 		return TRUE;
+	}
+
+	/**
+	 * session reset
+	 *
+	 * @return bool
+	 * @author Eugene Kudelia
+	 */
+	public function session_reset()
+	{
+		if ($this->session->restart())
+		{
+			// delete the remember and identity cookies if they exist
+			if (Cookie::get('identity'))
+			{
+				Cookie::delete('identity');
+			}
+			if (Cookie::get('remember_code'))
+			{
+				Cookie::delete('remember_code');
+			}
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	/**
