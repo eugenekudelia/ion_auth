@@ -58,32 +58,18 @@ class Ion_Auth
 	protected $status;
 
 	/**
-	 * extra where
-	 *
-	 * @var array
-	 */
-	public $_extra_where = array();
-
-	/**
-	 * extra set
-	 *
-	 * @var array
-	 */
-	public $_extra_set = array();
-
-	/**
 	 * caching of users and their groups
 	 *
 	 * @var array
 	 */
-	public $_cache_user_in_group = array();
+	protected $_cache_user_in_group = array();
 
 	/**
 	 * caching of user cms access
 	 *
 	 * @var array
 	 */
-	public $_cache_user_has_cms_access = array();
+	protected $_cache_user_has_cms_access = array();
 
 
 	/**
@@ -490,12 +476,8 @@ class Ion_Auth
 	public function get_user_id()
 	{
 		$user_id = $this->_session()->get('user_id');
-		if ( ! empty($user_id))
-		{
-			return (int) $user_id;
-		}
 
-		return NULL;
+		return $user_id ? (int) $user_id : NULL;
 	}
 
 	/**
