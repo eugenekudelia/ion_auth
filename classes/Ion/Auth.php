@@ -73,7 +73,7 @@ class Ion_Auth
 
 
 	/**
-	 *
+	 * Ion Auth instance
 	 */
 	public static function instance()
 	{
