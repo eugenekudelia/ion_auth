@@ -2602,35 +2602,6 @@ class Model_Ion_Auth extends Model_Common
 	/**
 	 * @kohana Eugene Kudelia
 	 */
-	protected function _filter_data($table, $data, $db = NULL)
-	{
-		if ( ! is_object($db))
-		{
-			$db = Database::instance();
-		}
-
-		$filtered_data = array();
-		$col_arr = $db->list_columns($table);
-		foreach ($col_arr as $col)
-		{
-			$columns[] = $col['column_name'];
-		}
-
-		if (is_array($data))
-		{
-			foreach ($columns as $column)
-			{
-				if (array_key_exists($column, $data))
-					$filtered_data[$column] = $data[$column];
-			}
-		}
-
-		return $filtered_data;
-	}
-
-	/**
-	 * @kohana Eugene Kudelia
-	 */
 	protected function _prepare_ip($ip_address)
 	{
 		$db_type = $this->db_type();
