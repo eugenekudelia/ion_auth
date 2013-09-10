@@ -86,60 +86,10 @@ class Model_Ion_Auth extends Model_Common
 	protected $salt_length;
 
 	/**
-	 * Where
-	 *
-	 * @var array
+	 * Ion Auth Query Builder properties
+	 * moved to parent Model_Common
+	 * for common use 
 	 */
-	public $_ion_where = array();
-
-	/**
-	 * Or where
-	 *
-	 * @var array
-	 */
-	public $_ion_or_where = array();
-
-	/**
-	 * Select
-	 *
-	 * @var array
-	 */
-	public $_ion_select = array();
-
-	/**
-	 * Like
-	 *
-	 * @var array
-	 */
-	//public $_ion_like = array();
-
-	/**
-	 * Limit
-	 *
-	 * @var string
-	 */
-	public $_ion_limit = NULL;
-
-	/**
-	 * Offset
-	 *
-	 * @var string
-	 */
-	public $_ion_offset = NULL;
-
-	/**
-	 * Order By
-	 *
-	 * @var string
-	 */
-	public $_ion_order_by = NULL;
-
-	/**
-	 * Order
-	 *
-	 * @var string
-	 */
-	public $_ion_order = NULL;
 
 	/**
 	 * Hooks
@@ -147,13 +97,6 @@ class Model_Ion_Auth extends Model_Common
 	 * @var object
 	 */
 	protected $_ion_hooks;
-
-	/**
-	 * Response
-	 *
-	 * @var string
-	 */
-	protected $response = NULL;
 
 	/**
 	 * message
@@ -1215,130 +1158,17 @@ class Model_Ion_Auth extends Model_Common
 		return FALSE;
 	}
 
-	public function limit($limit)
-	{
-		$this->trigger_events('limit');
-		$this->_ion_limit = $limit;
-
-		return $this;
-	}
-
-	public function offset($offset)
-	{
-		$this->trigger_events('offset');
-		$this->_ion_offset = $offset;
-
-		return $this;
-	}
-
-	public function where($column, $op, $value)
-	{
-		$this->trigger_events('where');
-
-		$where = array($column, $op, $value);
-		array_push($this->_ion_where, $where);
-
-		return $this;
-	}
-
-	public function or_where($column, $op, $value)
-	{
-		$this->trigger_events('or_where');
-
-		$or_where = array($column, $op, $value);
-		array_push($this->_ion_or_where, $or_where);
-
-		return $this;
-	}
-
-	//public function like($like, $value = NULL)
-	//{
-	//	$this->trigger_events('like');
-	//
-	//	if (!is_array($like))
-	//	{
-	//		$like = array($like => $value);
-	//	}
-	//
-	//	array_push($this->_ion_like, $like);
-	//
-	//	return $this;
-	//}
-
-	public function select($select)
-	{
-		$this->trigger_events('select');
-
-		$this->_ion_select[] = $select;
-
-		return $this;
-	}
-
-	public function order_by($by, $order='desc')
-	{
-		$this->trigger_events('order_by');
-
-		$this->_ion_order_by = $by;
-		$this->_ion_order    = $order;
-
-		return $this;
-	}
-
-	public function row()
-	{
-		$this->trigger_events('row');
-
-		$row = $this->response->as_object()->execute()->current();
-		unset($this->response);
-
-		return $row;
-	}
-
-	public function row_array()
-	{
-		$this->trigger_events(array('row', 'row_array'));
-
-		$row = $this->response->execute()->current();
-		unset($this->response);
-
-		return $row;
-	}
-
-	public function result()
-	{
-		$this->trigger_events('result');
-
-		$result = $this->response->execute();
-		unset($this->response);
-
-		return $result;
-	}
-
-	public function result_as_object()
-	{
-		$this->trigger_events('result');
-
-		$result = $this->response->as_object()->execute();
-		unset($this->response);
-
-		return $result;
-	}
-
-	public function result_as_array($key = NULL, $value = NULL)
-	{
-		$this->trigger_events(array('result', 'result_as_array'));
-
-		$result = $this->response->execute()->as_array($key, $value);
-		unset($this->response);
-
-		return $result;
-	}
+	/**
+	 * Ion Auth Query Builder methods
+	 * moved to parent Model_Common
+	 * for common use 
+	 */
 
 	public function rows_count() // num_rows()
 	{
 		$this->trigger_events(array('rows_count')); // 'num_rows'
 
-		$result = $this->response->execute()->count();
+		$result = $this->_response->execute()->count();
 
 		return $result;
 	}
@@ -1354,10 +1184,10 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('users');
 
-		if (isset($this->_ion_select) AND ! empty($this->_ion_select))
+		if (isset($this->_select) AND ! empty($this->_select))
 		{
 			$select = array();
-			foreach ($this->_ion_select as $item)
+			foreach ($this->_select as $item)
 			{
 				
 				if (is_array($item))
@@ -1375,7 +1205,7 @@ class Model_Ion_Auth extends Model_Common
 
 			$this->_ion_users = DB::select_array($select)->from($this->tables['users']);
 
-			$this->_ion_select = array();
+			$this->_select = array();
 		}
 		else
 		{
@@ -1416,67 +1246,67 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('extra_where');
 
 		//run each where that was passed
-		if (isset($this->_ion_where) AND ! empty($this->_ion_where))
+		if (isset($this->_where) AND ! empty($this->_where))
 		{
-			foreach ($this->_ion_where as $where)
+			foreach ($this->_where as $where)
 			{
 				$this->_ion_users->where($where[0], $where[1], $where[2]);
 			}
 
-			$this->_ion_where = array();
+			$this->_where = array();
 		}
 
 		//run each or_where that was passed
-		if (isset($this->_ion_or_where) AND ! empty($this->_ion_or_where))
+		if (isset($this->_or_where) AND ! empty($this->_or_where))
 		{
-			foreach ($this->_ion_or_where as $or_where)
+			foreach ($this->_or_where as $or_where)
 			{
 				$this->_ion_users->or_where($or_where[0], $or_where[1], $or_where[2]);
 			}
 
-			$this->_ion_or_where = array();
+			$this->_or_where = array();
 		}
 
-		//if (isset($this->_ion_like) AND ! empty($this->_ion_like))
+		//if (isset($this->_like) AND ! empty($this->_like))
 		//{
-		//	foreach ($this->_ion_like as $like)
+		//	foreach ($this->_like as $like)
 		//	{
 		//		$this->db->or_like($like);
 		//	}
 		//
-		//	$this->_ion_like = array();
+		//	$this->_like = array();
 		//}
 
-		if (isset($this->_ion_limit) AND isset($this->_ion_offset))
+		if (isset($this->_limit) AND isset($this->_offset))
 		{
-			$this->_ion_users->limit($this->_ion_limit)->offset($this->_ion_offset);
+			$this->_ion_users->limit($this->_limit)->offset($this->_offset);
 
-			$this->_ion_limit  = NULL;
-			$this->_ion_offset = NULL;
+			$this->_limit  = NULL;
+			$this->_offset = NULL;
 		}
-		elseif (isset($this->_ion_limit))
+		elseif (isset($this->_limit))
 		{
-			$this->_ion_users->limit($this->_ion_limit);
+			$this->_ion_users->limit($this->_limit);
 
-			$this->_ion_limit  = NULL;
+			$this->_limit  = NULL;
 		}
 
 		//set the order
-		if (isset($this->_ion_order_by) AND isset($this->_ion_order))
+		if (isset($this->_order_by) AND isset($this->_order))
 		{
-			$this->_ion_users->order_by($this->_ion_order_by, $this->_ion_order);
+			$this->_ion_users->order_by($this->_order_by, $this->_order);
 
-			$this->_ion_order_by = NULL;
-			$this->_ion_order    = NULL;
+			$this->_order_by = NULL;
+			$this->_order    = NULL;
 		}
-		elseif (isset($this->_ion_order_by))
+		elseif (isset($this->_order_by))
 		{
-			$this->_ion_users->order_by($this->_ion_order_by);
+			$this->_ion_users->order_by($this->_order_by);
 
-			$this->_ion_order_by = NULL;
+			$this->_order_by = NULL;
 		}
 
-		$this->response = $this->_ion_users;
+		$this->_response = $this->_ion_users;
 
 		return $this;
 	}
@@ -1790,10 +1620,10 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('groups');
 
-		if (isset($this->_ion_select) AND ! empty($this->_ion_select))
+		if (isset($this->_select) AND ! empty($this->_select))
 		{
 			$select = array();
-			foreach ($this->_ion_select as $item)
+			foreach ($this->_select as $item)
 			{
 				
 				if (is_array($item))
@@ -1811,7 +1641,7 @@ class Model_Ion_Auth extends Model_Common
 
 			$this->_ion_groups = DB::select_array($select)->from($this->tables['groups']);
 
-			$this->_ion_select = array();
+			$this->_select = array();
 		}
 		else
 		{
@@ -1819,57 +1649,57 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		//run each where that was passed
-		if (isset($this->_ion_where) AND ! empty($this->_ion_where))
+		if (isset($this->_where) AND ! empty($this->_where))
 		{
-			foreach ($this->_ion_where as $where)
+			foreach ($this->_where as $where)
 			{
 				$this->_ion_groups->where($where[0], $where[1], $where[2]);
 			}
 
-			$this->_ion_where = array();
+			$this->_where = array();
 		}
 
 		//run each or_where that was passed
-		if (isset($this->_ion_or_where) AND ! empty($this->_ion_or_where))
+		if (isset($this->_or_where) AND ! empty($this->_or_where))
 		{
-			foreach ($this->_ion_or_where as $or_where)
+			foreach ($this->_or_where as $or_where)
 			{
 				$this->_ion_groups->or_where($or_where[0], $or_where[1], $or_where[2]);
 			}
 
-			$this->_ion_or_where = array();
+			$this->_or_where = array();
 		}
 
-		if (isset($this->_ion_limit) AND isset($this->_ion_offset))
+		if (isset($this->_limit) AND isset($this->_offset))
 		{
-			$this->_ion_groups->limit($this->_ion_limit, $this->_ion_offset);
+			$this->_ion_groups->limit($this->_limit, $this->_offset);
 
-			$this->_ion_limit  = NULL;
-			$this->_ion_offset = NULL;
+			$this->_limit  = NULL;
+			$this->_offset = NULL;
 		}
-		elseif (isset($this->_ion_limit))
+		elseif (isset($this->_limit))
 		{
-			$this->_ion_groups->limit($this->_ion_limit);
+			$this->_ion_groups->limit($this->_limit);
 
-			$this->_ion_limit  = NULL;
+			$this->_limit  = NULL;
 		}
 
 		//set the order
-		if (isset($this->_ion_order_by) AND isset($this->_ion_order))
+		if (isset($this->_order_by) AND isset($this->_order))
 		{
-			$this->_ion_groups->order_by($this->_ion_order_by, $this->_ion_order);
+			$this->_ion_groups->order_by($this->_order_by, $this->_order);
 
-			$this->_ion_order_by = NULL;
-			$this->_ion_order    = NULL;
+			$this->_order_by = NULL;
+			$this->_order    = NULL;
 		}
-		elseif (isset($this->_ion_order_by))
+		elseif (isset($this->_order_by))
 		{
-			$this->_ion_groups->order_by($this->_ion_order_by);
+			$this->_ion_groups->order_by($this->_order_by);
 
-			$this->_ion_order_by = NULL;
+			$this->_order_by = NULL;
 		}
 
-		$this->response = $this->_ion_groups;
+		$this->_response = $this->_ion_groups;
 
 		return $this;
 	}
