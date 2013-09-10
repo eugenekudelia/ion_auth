@@ -151,16 +151,6 @@ class Model_Ion_Auth extends Model_Common
 	protected $rounds;
 
 	/**
-	 * Users object
-	 */
-	protected $_ion_users;
-
-	/**
-	 * Groups object
-	 */
-	protected $_ion_groups;
-
-	/**
 	 *
 	 */
 	protected $_ip_address;
@@ -1194,14 +1184,14 @@ class Model_Ion_Auth extends Model_Common
 				}
 			}
 
-			$this->_ion_users = DB::select_array($select)->from($this->tables['users']);
+			$this->_query = DB::select_array($select)->from($this->tables['users']);
 
 			$this->_select = array();
 		}
 		else
 		{
 			//default selects
-			$this->_ion_users = DB::select(
+			$this->_query = DB::select(
 				$this->tables['users'].'.*',
 			    array($this->tables['users'].'.id', 'id'),
 			    array($this->tables['users'].'.id', 'user_id')
@@ -1220,7 +1210,7 @@ class Model_Ion_Auth extends Model_Common
 			//join and then run a where_in against the group ids
 			if (isset($groups) AND ! empty($groups))
 			{
-				$this->_ion_users
+				$this->_query
 					->distinct(TRUE)
 					->join($this->tables['users_groups'], 'INNER')
 					->on($this->tables['users_groups'].'.'.$this->join['users'], '=', $this->tables['users'].'.id')
@@ -1228,8 +1218,8 @@ class Model_Ion_Auth extends Model_Common
 
 				if (in_array($this->group_id($this->config->get('default_group')), $groups) AND count($groups) == 1)
 				{
-					//$this->_ion_users->where($this->tables['users'].'.id', 'NOT IN', $this->manager_users());
-					$this->_ion_users->where($this->tables['users'].'.cms', '=', 0);
+					//$this->_query->where($this->tables['users'].'.id', 'NOT IN', $this->manager_users());
+					$this->_query->where($this->tables['users'].'.cms', '=', 0);
 				}
 			}
 		}
@@ -1241,7 +1231,7 @@ class Model_Ion_Auth extends Model_Common
 		{
 			foreach ($this->_where as $where)
 			{
-				$this->_ion_users->where($where[0], $where[1], $where[2]);
+				$this->_query->where($where[0], $where[1], $where[2]);
 			}
 
 			$this->_where = array();
@@ -1252,7 +1242,7 @@ class Model_Ion_Auth extends Model_Common
 		{
 			foreach ($this->_or_where as $or_where)
 			{
-				$this->_ion_users->or_where($or_where[0], $or_where[1], $or_where[2]);
+				$this->_query->or_where($or_where[0], $or_where[1], $or_where[2]);
 			}
 
 			$this->_or_where = array();
@@ -1270,14 +1260,14 @@ class Model_Ion_Auth extends Model_Common
 
 		if (isset($this->_limit) AND isset($this->_offset))
 		{
-			$this->_ion_users->limit($this->_limit)->offset($this->_offset);
+			$this->_query->limit($this->_limit)->offset($this->_offset);
 
 			$this->_limit  = NULL;
 			$this->_offset = NULL;
 		}
 		elseif (isset($this->_limit))
 		{
-			$this->_ion_users->limit($this->_limit);
+			$this->_query->limit($this->_limit);
 
 			$this->_limit  = NULL;
 		}
@@ -1285,19 +1275,17 @@ class Model_Ion_Auth extends Model_Common
 		//set the order
 		if (isset($this->_order_by) AND isset($this->_order))
 		{
-			$this->_ion_users->order_by($this->_order_by, $this->_order);
+			$this->_query->order_by($this->_order_by, $this->_order);
 
 			$this->_order_by = NULL;
 			$this->_order    = NULL;
 		}
 		elseif (isset($this->_order_by))
 		{
-			$this->_ion_users->order_by($this->_order_by);
+			$this->_query->order_by($this->_order_by);
 
 			$this->_order_by = NULL;
 		}
-
-		$this->_response = $this->_ion_users;
 
 		return $this;
 	}
@@ -1630,13 +1618,13 @@ class Model_Ion_Auth extends Model_Common
 				}
 			}
 
-			$this->_ion_groups = DB::select_array($select)->from($this->tables['groups']);
+			$this->_query = DB::select_array($select)->from($this->tables['groups']);
 
 			$this->_select = array();
 		}
 		else
 		{
-			$this->_ion_groups = DB::select()->from($this->tables['groups']);
+			$this->_query = DB::select()->from($this->tables['groups']);
 		}
 
 		//run each where that was passed
@@ -1644,7 +1632,7 @@ class Model_Ion_Auth extends Model_Common
 		{
 			foreach ($this->_where as $where)
 			{
-				$this->_ion_groups->where($where[0], $where[1], $where[2]);
+				$this->_query->where($where[0], $where[1], $where[2]);
 			}
 
 			$this->_where = array();
@@ -1655,7 +1643,7 @@ class Model_Ion_Auth extends Model_Common
 		{
 			foreach ($this->_or_where as $or_where)
 			{
-				$this->_ion_groups->or_where($or_where[0], $or_where[1], $or_where[2]);
+				$this->_query->or_where($or_where[0], $or_where[1], $or_where[2]);
 			}
 
 			$this->_or_where = array();
@@ -1663,14 +1651,14 @@ class Model_Ion_Auth extends Model_Common
 
 		if (isset($this->_limit) AND isset($this->_offset))
 		{
-			$this->_ion_groups->limit($this->_limit, $this->_offset);
+			$this->_query->limit($this->_limit, $this->_offset);
 
 			$this->_limit  = NULL;
 			$this->_offset = NULL;
 		}
 		elseif (isset($this->_limit))
 		{
-			$this->_ion_groups->limit($this->_limit);
+			$this->_query->limit($this->_limit);
 
 			$this->_limit  = NULL;
 		}
@@ -1678,19 +1666,17 @@ class Model_Ion_Auth extends Model_Common
 		//set the order
 		if (isset($this->_order_by) AND isset($this->_order))
 		{
-			$this->_ion_groups->order_by($this->_order_by, $this->_order);
+			$this->_query->order_by($this->_order_by, $this->_order);
 
 			$this->_order_by = NULL;
 			$this->_order    = NULL;
 		}
 		elseif (isset($this->_order_by))
 		{
-			$this->_ion_groups->order_by($this->_order_by);
+			$this->_query->order_by($this->_order_by);
 
 			$this->_order_by = NULL;
 		}
-
-		$this->_response = $this->_ion_groups;
 
 		return $this;
 	}
