@@ -1164,15 +1164,6 @@ class Model_Ion_Auth extends Model_Common
 	 * for common use 
 	 */
 
-	public function rows_count() // num_rows()
-	{
-		$this->trigger_events(array('rows_count')); // 'num_rows'
-
-		$result = $this->_response->execute()->count();
-
-		return $result;
-	}
-
 	/**
 	 * users
 	 *
