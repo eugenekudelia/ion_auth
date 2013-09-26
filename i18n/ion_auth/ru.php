@@ -175,5 +175,6 @@ return array(
 	'Core Group'	=> 'Системная группа',
 	'Create Group'	=> 'Создать группу',
 	'CMS access'	=> 'Доступ к CMS',
+	'users group'	=> 'группу',
 	''	=> '',
 );

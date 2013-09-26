@@ -175,5 +175,6 @@ return array(
 	'Core Group'	=> 'Core Group',
 	'Create Group'	=> 'Create Group',
 	'CMS access'	=> 'CMS access',
+	'users group'	=> 'group',
 	''	=> '',
 );
