@@ -1710,7 +1710,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function group_by_name($name = '')
 	{
-		if (empty($group))
+		if (empty($name))
 		{
 			return FALSE;
 		}
