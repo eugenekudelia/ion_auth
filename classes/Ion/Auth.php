@@ -614,17 +614,17 @@ class Ion_Auth
 	/**
 	 *
 	 */
-	public function unique_group($group)
+	public function unique_group($name)
 	{
-		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'group', $group);
+		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'name', $name);
 	}
 
 	/**
 	 *
 	 */
-	public function unique_groupname($groupname)
+	public function unique_groupname($title)
 	{
-		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'name', $groupname);
+		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'title', $title);
 	}
 
 	/**

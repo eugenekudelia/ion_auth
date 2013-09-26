@@ -72,8 +72,8 @@ return array(
 	| 
 	*/
 	'all_managers'			=> 'all-managers',
-	'all_managers_name'		=> 'All managers',
-	'web_users_name'		=> 'All frontend users',
+	'all_managers_title'	=> 'All managers',
+	'web_users_title'		=> 'All frontend users',
 
 	/*
 	 | -------------------------------------------------------------------------

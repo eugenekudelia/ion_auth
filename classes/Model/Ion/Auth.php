@@ -1409,8 +1409,8 @@ class Model_Ion_Auth extends Model_Common
 
 		$query =  DB::select(
 			array($this->tables['users_groups'].'.'.$this->join['groups'], 'id'),
-			$this->tables['groups'].'.group',
 			$this->tables['groups'].'.name',
+			$this->tables['groups'].'.title',
 			$this->tables['groups'].'.cms'
 		)
 			->from($this->tables['users_groups'])
@@ -1708,16 +1708,16 @@ class Model_Ion_Auth extends Model_Common
 	 * @return mixed
 	 * @author Eugene Kudelia
 	 */
-	public function group_by_name($group = '')
+	public function group_by_name($name = '')
 	{
 		if (empty($group))
 		{
 			return FALSE;
 		}
 
-		$this->trigger_events('group');
+		$this->trigger_events('group_by_name');
 
-		$this->where($this->tables['groups'].'.group', '=', $group);
+		$this->where($this->tables['groups'].'.name', '=', $name);
 		$this->limit(1)->groups();
 
 		return $this;
@@ -2041,21 +2041,21 @@ class Model_Ion_Auth extends Model_Common
 	 * @return bool
 	 * @author Eugene Kudelia
 	 */
-	public function create_group($group, $name = NULL, $cms = 0)
+	public function create_group($name, $title = NULL, $cms = 0)
 	{
-		if ( ! $group)
+		if ( ! $name)
 		{
-			$this->set_error('new_group_required');
+			$this->set_error('new_group_name_required');
 
 			return FALSE;
 		}
 
 		$this->trigger_events('pre_create_group');
 
-		! is_string($name) OR $name = trim($name);
-		! empty($name) OR $name = ucfirst($group);
+		! is_string($title) OR $title = trim($title);
+		! empty($title) OR $title = ucfirst($name);
 
-		if ($this->row_exists($this->tables['groups'], 'group', $group))
+		if ($this->row_exists($this->tables['groups'], 'name', $name))
 		{
 			$this->set_error('group_already_exists');
 
@@ -2063,8 +2063,8 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		list($id, $rows) = DB::insert($this->tables['groups'])
-							->columns(array('group', 'name', 'cms'))
-							->values(array($group, $name, $cms))
+							->columns(array('name', 'title', 'cms'))
+							->values(array($name, $title, $cms))
 							->execute();
 
 		if (is_numeric($id) AND $rows === 1)
@@ -2087,34 +2087,34 @@ class Model_Ion_Auth extends Model_Common
 	 * @return bool
 	 * @author Eugene Kudelia
 	 */
-	public function rename_group($id, $name)
+	public function rename_group($id, $title)
 	{
-		if ( ! $id OR ! $name)
+		if ( ! $id OR ! $title)
 		{
 			$this->set_error('Each of arguments ( $id, $name ) must be a non-empty string');
 
 			return FALSE;
 		}
 
-		if ($this->row_exists($this->tables['groups'], 'name', $name))
+		if ($this->row_exists($this->tables['groups'], 'title', $title))
 		{
-			$this->set_error('group_name_already_exists');
+			$this->set_error('group_title_already_exists');
 
 			return FALSE;
 		}
 
 		$affected_rows = DB::update($this->tables['groups'])
-							->set(array('name' => $name))
+							->set(array('title' => $title))
 							->where('id', '=', $id)
 							->execute();
 
 		if ($affected_rows === 1)
 		{
-			$this->set_message('rename_group_successful');
+			$this->set_message('set_new_group_title_successful');
 		}
 		else
 		{
-			$this->set_error('rename_group_unsuccessful');
+			$this->set_error('set_new_group_title_unsuccessful');
 		}
 
 		return $affected_rows === 1;
