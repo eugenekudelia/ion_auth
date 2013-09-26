@@ -529,7 +529,7 @@ class Ion_Auth
 			$groups_array = array();
 			foreach ($users_groups as $group)
 			{
-				$groups_array[$group->id] = $group->group;
+				$groups_array[$group->id] = $group->name;
 			}
 			$this->_cache_user_in_group[$id] = $groups_array;
 		}
@@ -614,7 +614,7 @@ class Ion_Auth
 	/**
 	 *
 	 */
-	public function unique_group($name)
+	public function unique_groupname($name)
 	{
 		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'name', $name);
 	}
@@ -622,7 +622,7 @@ class Ion_Auth
 	/**
 	 *
 	 */
-	public function unique_groupname($title)
+	public function unique_grouptitle($title)
 	{
 		return ! $this->row_exists($this->ion_auth_model->tables['groups'], 'title', $title);
 	}
