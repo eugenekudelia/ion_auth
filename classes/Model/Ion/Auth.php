@@ -1355,21 +1355,21 @@ class Model_Ion_Auth extends Model_Common
 	 * @return integer Group ID
 	 * @author Eugene Kudelia
 	 */
-	public function group_id($group)
+	public function group_id($name)
 	{
-		if (isset($this->_group_id[$group]))
+		if (isset($this->_group_id[$name]))
 		{
-			return $this->_group_id[$group];
+			return $this->_group_id[$name];
 		}
 
-		$this->_group_id[$group] = DB::select('id')
+		$this->_group_id[$name] = DB::select('id')
 			->from($this->tables['groups'])
-			->where('group', '=', $group)
+			->where('name', '=', $name)
 			->limit(1)
 			->execute()
 			->get('id');
 
-		return $this->_group_id[$group];
+		return $this->_group_id[$name];
 	}
 
 	/**
