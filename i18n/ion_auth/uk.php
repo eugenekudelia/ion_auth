@@ -164,8 +164,8 @@ return array(
 	// Groups / Permissions
 	'Groups and Permissions'	=> 'Группы и права доступа',
 	'Users Groups'	=> 'Группы пользователя',
-	'Group Name'	=> 'Название группы',
-	'Group'			=> 'Группа',
+	'Group Name'	=> 'Группа',
+	'Group Title'	=> 'Название группы',
 	'CMS Access'	=> 'Доступ к CMS',
 	'The :name group has full access.'	=> 'Группа :name имеет полный доступ.',
 	'Restricted access to editing.'		=> 'Restricted access to editing.',

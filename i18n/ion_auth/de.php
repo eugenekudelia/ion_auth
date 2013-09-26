@@ -165,7 +165,7 @@ return array(
 	'Groups and Permissions'	=> 'Groups and Permissions',
 	'Users Groups'	=> 'Users Groups',
 	'Group Name'	=> 'Group Name',
-	'Group'			=> 'Group',
+	'Group Title'	=> 'Group Title',
 	'CMS Access'	=> 'CMS Access',
 	'The :name group has full access.'	=> 'The :name group has full access.',
 	'Restricted access to editing.'		=> 'Restricted access to editing.',
