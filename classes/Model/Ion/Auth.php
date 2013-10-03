@@ -1825,10 +1825,6 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
-		// Filter the data passed
-		$user_data = $this->_filter_data($this->tables['users'], $user_data, $db);
-		$profile = $this->_filter_data($this->tables['profiles'], $profile, $db);
-
 		if (empty($user_data) AND empty($profile))
 		{
 			$this->set_error('update_data_mismatch');
@@ -1838,13 +1834,17 @@ class Model_Ion_Auth extends Model_Common
 		$db = Database::instance();
 		$db->begin();
 
+		// Filter the data passed
+		$user_data = $this->_filter_data($this->tables['users'], $user_data, $db);
+		$profile = $this->_filter_data($this->tables['profiles'], $profile, $db);
+
 		if (array_key_exists('username', $user_data) OR array_key_exists('password', $user_data) OR array_key_exists('email', $user_data))
 		{
 			if (array_key_exists('password', $user_data))
 			{
 				if ( ! empty($user_data['password']))
 				{
-					$user_data['password'] = $this->hash_password($user_data['password'], $user->get('salt'));
+					$user_data['password'] = $this->hash_password($user_data['password'], $user->salt);
 				}
 				else
 				{
