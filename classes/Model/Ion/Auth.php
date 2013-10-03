@@ -633,11 +633,11 @@ class Model_Ion_Auth extends Model_Common
 								->where($this->identity_column, '=', $identity)
 								->execute();
 
-			if ($successfully_changed_password_in_db = ($affected_rows === 1))
+			if ($return = ($affected_rows === 1))
 			{
 				if ($self)
 				{
-					$this->session->restart();
+					$this->session->regenerate();
 				
 					$this->set_session($user);
 					$this->clear_login_attempts($identity);
@@ -662,7 +662,7 @@ class Model_Ion_Auth extends Model_Common
 				$this->set_error('password_change_unsuccessful');
 			}
 
-			return $successfully_changed_password_in_db;
+			return $return;
 		}
 
 		$this->set_error('password_change_unsuccessful');
