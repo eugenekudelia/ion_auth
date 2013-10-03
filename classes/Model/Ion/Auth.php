@@ -1026,14 +1026,9 @@ class Model_Ion_Auth extends Model_Common
 					$this->remember_user($user->id);
 				}
 
-				$dn = DB::select('display_name')
-						->from($this->tables['profiles'])
-						->where('user_id', '=', $user->id)
-					    ->limit(1)
-						->as_object()
-						->execute();
-				$user->display_name = $dn->count() === 1
-					? $dn->current()->display_name
+				$dn = $this->select('display_name')->profile($user->id);
+				$user->display_name = $dn->rows_count() === 1
+					? $dn->row()->display_name
 					: NULL;
 
 				$this->trigger_events(array('post_login', 'post_login_successful'));
@@ -1473,6 +1468,29 @@ class Model_Ion_Auth extends Model_Common
 	}
 
 	/**
+	 * profile
+	 *
+	 * @return object
+	 * @author Eugene Kudelia
+	 */
+	public function profile($id = NULL)
+	{
+		$this->trigger_events('profile');
+
+		//if no id was passed use the current users id
+		$id OR $id = $this->session->get('user_id');
+
+		// Database Query Builder object: $this->_query
+		$this->_query($this->tables['profiles']);
+
+		$this->_query
+			->where($this->tables['profiles'].'.'.$this->join['users'], '=', $id)
+			->limit(1);
+
+		return $this;
+	}
+
+	/**
 	 * get_users_groups
 	 *
 	 * @return array
@@ -1678,33 +1696,8 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('groups');
 
-		if (isset($this->_select) AND ! empty($this->_select))
-		{
-			$select = array();
-			foreach ($this->_select as $item)
-			{
-				
-				if (is_array($item))
-				{
-					foreach($item as $col)
-					{
-						$select[] = $this->tables['groups'].'.'.$col;
-					}
-				}
-				elseif (is_string($item))
-				{
-					$select[] = $this->tables['groups'].'.'.$item;
-				}
-			}
-
-			$this->_query = DB::select_array($select)->from($this->tables['groups']);
-
-			$this->_select = array();
-		}
-		else
-		{
-			$this->_query = DB::select()->from($this->tables['groups']);
-		}
+		// Database Query Builder object: $this->_query
+		$this->_query($this->tables['groups']);
 
 		//run each where that was passed
 		if (isset($this->_where) AND ! empty($this->_where))
