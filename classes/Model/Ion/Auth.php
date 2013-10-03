@@ -582,7 +582,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		$query = DB::select('id', 'salt', $this->identity_column, 'username', 'email', 'last_login')
+		$query = DB::select('id', 'email', 'username', 'salt', 'last_login')
 		            ->from($this->tables['users'])
 		            ->where($this->identity_column, '=', $identity)
 		            ->limit(1)
@@ -808,16 +808,16 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$identity = $this->config->get('identity');
 
-		$select = DB::select($identity)
+		$query = DB::select($identity)
 					->from($this->tables['users'])
 					->where('email', '=', $email);
 
 		if (is_string($login) AND strlen($login) >= $this->config->get('min_username_length'))
 		{
-			$select = $select->where($identity, '=', $login);
+			$query = $query->where($identity, '=', $login);
 		}
 
-		$result = $select->limit(1)->execute();
+		$result = $query->limit(1)->execute();
 
 		if ($result->count() !== 1)
 		{
@@ -835,19 +835,24 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function register($username, $password, $email, $additional_data = array(), $groups = array())
+	public function register($email, $username, $password, $display_name = NULL, array $groups = array(), array $profile = NULL)
 	{
 		$this->trigger_events('pre_register');
 
-		$not_unique = $this->row_exists($this->tables['users'], 'username', $username);
 		if ($this->identity_column == 'email' AND $this->row_exists($this->tables['users'], 'email', $email))
 		{
 			$this->set_error('account_creation_duplicate_email');
 			return FALSE;
 		}
-		elseif ($this->identity_column == 'username' AND $not_unique)
+		elseif ($this->identity_column == 'username' AND $this->row_exists($this->tables['users'], 'username', $username))
 		{
 			$this->set_error('account_creation_duplicate_username');
+			return FALSE;
+		}
+
+		if (is_string($display_name) AND $this->row_exists($this->tables['users'], 'display_name', $display_name))
+		{
+			$this->set_error('account_creation_duplicate_display_name');
 			return FALSE;
 		}
 
@@ -855,7 +860,7 @@ class Model_Ion_Auth extends Model_Common
 		if ($this->identity_column != 'username')
 		{
 			$original_username = $username;
-			for ($i = 0; $not_unique; $i++)
+			for ($i = 0; $this->row_exists($this->tables['users'], 'username', $username); $i++)
 			{
 				if ($i > 0)
 				{
@@ -881,13 +886,11 @@ class Model_Ion_Auth extends Model_Common
 
 		// Users table.
 		$data = array(
-		    'username'   => $username,
-		    'password'   => $password,
-		    'email'      => $email,
-		    'ip_address' => $this->_ip_address(),
-		    'created_on' => time(),
-		    'active'     => $active,
-			'cms'        => $cms
+		    'email'			=> $email,
+		    'username'		=> $username,
+		    'password'		=> $password,
+			'cms'			=> $cms,
+		    'active'		=> $active
 		);
 
 		if ($this->store_salt)
@@ -897,9 +900,8 @@ class Model_Ion_Auth extends Model_Common
 
 		//filter out any data passed that doesnt have a matching column in the users table
 		//and merge the set user data and the additional data
-		$user_data = array_merge($this->_filter_data($this->tables['users'], $additional_data), $data);
-		$columns = array_keys($user_data);
-		$values = array_values($user_data);
+		$columns = array_keys($data);
+		$values = array_values($data);
 
 		$this->trigger_events('extra_set');
 
@@ -921,6 +923,34 @@ class Model_Ion_Auth extends Model_Common
 			foreach ($groups as $group)
 			{
 				$this->add_to_group($group, $id);
+			}
+
+			// Profiles table.
+			$user_data = array(
+				'user_id'		=> $id,
+			    'ip_address'	=> $this->_ip_address(),
+			    'created_on'	=> time(),
+				'display_name'	=> $display_name
+			);
+
+			if ($profile)
+			{
+				//filter out any data passed that doesnt have a matching column in the profiles table
+				//and merge the set user data and the profile
+				$user_data = array_merge($user_data, $this->_filter_data($this->tables['profiles'], $profile));
+			}
+			$profiles_columns = array_keys($user_data);
+			$profiles_values = array_values($user_data);
+
+			list($profile_id, $profile_rows) = DB::insert($this->tables['profiles'])
+				->columns($profiles_columns)
+				->values($profiles_values)
+				->execute();
+
+			if ($profile_rows !== 1)
+			{
+				DB::delete($this->tables['users'])->where('id', '=', $id)->execute();
+				return FALSE;
 			}
 
 			$this->trigger_events('post_register');
@@ -960,9 +990,8 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		$query = DB::select($this->identity_column, 'id',
-							'username', 'email', 'password',
-							'last_login', 'active', 'cms', 'display_name')
+		$query = DB::select('id', 'email', 'username',
+							'cms', 'active', 'last_login')
 		                  ->from($this->tables['users'])
 		                  ->where($this->identity_column, '=', $identity)
 		                  ->limit(1)
@@ -997,10 +1026,19 @@ class Model_Ion_Auth extends Model_Common
 					$this->remember_user($user->id);
 				}
 
-				$this->trigger_events(array('post_login', 'post_login_successful'));
-				$this->set_message(__('Hi,').' '.($user->display_name ?: $user->username).' !');
+				$dn = DB::select('display_name')
+						->from($this->tables['profiles'])
+						->where('user_id', '=', $user->id)
+					    ->limit(1)
+						->as_object()
+						->execute();
+				$user->display_name = $dn->count() === 1
+					? $dn->current()->display_name
+					: NULL;
 
-				return TRUE;
+				$this->trigger_events(array('post_login', 'post_login_successful'));
+
+				return $user;
 			}
 		}
 
@@ -1161,7 +1199,7 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Ben Edmunds
 	 * @kohana Eugene Kudelia
 	 */
-	public function users($groups = NULL)
+	public function users($groups = NULL, $profiles = FALSE)
 	{
 		$this->trigger_events('users');
 
@@ -1170,7 +1208,6 @@ class Model_Ion_Auth extends Model_Common
 			$select = array();
 			foreach ($this->_select as $item)
 			{
-				
 				if (is_array($item))
 				{
 					foreach($item as $col)
@@ -1183,19 +1220,61 @@ class Model_Ion_Auth extends Model_Common
 					$select[] = $this->tables['users'].'.'.$item;
 				}
 			}
+			$this->_select = array();
+
+			if (isset($this->_select_join) AND ! empty($this->_select_join))
+			{
+				$select_join = array();
+				foreach ($this->_select_join as $item)
+				{
+					if (is_array($item))
+					{
+						foreach($item as $col)
+						{
+							$select_join[] = $this->tables['profiles'].'.'.$col;
+						}
+					}
+					elseif (is_string($item))
+					{
+						$select_join[] = $this->tables['profiles'].'.'.$item;
+					}
+				}
+				$select = array_merge($select, $select_join);
+				$this->_select_join = array();
+			}
 
 			$this->_query = DB::select_array($select)->from($this->tables['users']);
 
-			$this->_select = array();
+			if (isset($select_join) AND ! empty($select_join))
+			{
+				$this->_query
+					->join($this->tables['profiles'])
+					->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
+			}
 		}
 		else
 		{
-			//default selects
-			$this->_query = DB::select(
-				$this->tables['users'].'.*',
-			    array($this->tables['users'].'.id', 'id'),
-			    array($this->tables['users'].'.id', 'user_id')
-			)->from($this->tables['users']);
+			if ( ! $profiles)
+			{
+				//default selects
+				$this->_query = DB::select(
+					$this->tables['users'].'.*',
+				    array($this->tables['users'].'.id', 'id'),
+				    array($this->tables['users'].'.id', 'user_id')
+				)->from($this->tables['users']);
+			}
+			else
+			{
+				// Users + Profiles
+				$this->_query = DB::select(
+					$this->tables['users'].'.*', $this->tables['profiles'].'.*',
+				    array($this->tables['users'].'.id', 'id'),
+				    array($this->tables['users'].'.id', 'user_id')
+				)
+					->from($this->tables['users'])
+					->join($this->tables['profiles'])
+					->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
+			}
 		}
 
 		//filter by group id(s) if passed
@@ -1208,7 +1287,7 @@ class Model_Ion_Auth extends Model_Common
 			}
 
 			//join and then run a where_in against the group ids
-			if (isset($groups) AND ! empty($groups))
+			if ( ! empty($groups))
 			{
 				$this->_query
 					->distinct(TRUE)
@@ -1379,7 +1458,7 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Ben Edmunds
 	 * @kohana Eugene Kudelia
 	 */
-	public function user($id = NULL)
+	public function user($id = NULL, $profile = FALSE)
 	{
 		$this->trigger_events('user');
 
@@ -1388,7 +1467,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->where($this->tables['users'].'.id', '=', $id)
 			->limit(1)
-			->users();
+			->users(NULL, $profile);
 
 		return $this;
 	}
@@ -1730,15 +1809,21 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Phil Sturgeon
 	 * @kohana Eugene Kudelia
 	 */
-	public function update($id, array $data)
+	public function update($id, array $user_data = NULL, array $profile = NULL)
 	{
+		if (empty($user_data) AND empty($profile))
+		{
+			$this->set_error('no_chosen_items');
+			return FALSE;
+		}
+
 		$this->trigger_events('pre_update_user');
 
-		$user = $this->user($id)->result();
+		$user = $this->user($id)->row();
 
-		if (array_key_exists($this->identity_column, $data)
-			AND $this->row_exists($this->tables['users'], $this->identity_column, $data[$this->identity_column])
-			AND $user->get($this->identity_column) !== $data[$this->identity_column])
+		if (array_key_exists($this->identity_column, $user_data)
+			AND $this->row_exists($this->tables['users'], $this->identity_column, $user_data[$this->identity_column])
+			AND $user->{$this->identity_column} !== $user_data[$this->identity_column])
 		{
 			$this->set_error('account_creation_duplicate_'.$this->identity_column);
 
@@ -1747,43 +1832,59 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
+		// Filter the data passed
+		$user_data = $this->_filter_data($this->tables['users'], $user_data, $db);
+		$profile = $this->_filter_data($this->tables['profiles'], $profile, $db);
+
+		if (empty($user_data) AND empty($profile))
+		{
+			$this->set_error('update_data_mismatch');
+			return FALSE;
+		}
+
 		$db = Database::instance();
 		$db->begin();
 
-		// Filter the data passed
-		$data = $this->_filter_data($this->tables['users'], $data, $db);
-
-		if (array_key_exists('username', $data) OR array_key_exists('password', $data) OR array_key_exists('email', $data))
+		if (array_key_exists('username', $user_data) OR array_key_exists('password', $user_data) OR array_key_exists('email', $user_data))
 		{
-			if (array_key_exists('password', $data))
+			if (array_key_exists('password', $user_data))
 			{
-				if ( ! empty($data['password']))
+				if ( ! empty($user_data['password']))
 				{
-					$data['password'] = $this->hash_password($data['password'], $user->get('salt'));
+					$user_data['password'] = $this->hash_password($user_data['password'], $user->get('salt'));
 				}
 				else
 				{
 					// unset password so it doesn't effect database entry if no password passed
-					unset($data['password']);
+					unset($user_data['password']);
 				}
 			}
 		}
 
-		$data['edited_on'] = time();
-		$data['edited_by'] = $this->session->get('user_id');
+		$profile['edited_on'] = time();
+		$profile['edited_by'] = $this->session->get('user_id');
 
 		try
 		{
 			$this->trigger_events('extra_where');
 
-			$return = DB::update($this->tables['users'])
-						->set($data)
-						->where('id', '=', $user->get('id'))
-						->execute();
+			if ( ! empty($user_data))
+			{
+				$upd_data = DB::update($this->tables['users'])
+								->set($user_data)
+								->where('id', '=', $user->id)
+								->execute();
+			}
+			$upd_proifle = DB::update($this->tables['profiles'])
+							->set($profile)
+							->where('user_id', '=', $user->id)
+							->execute();
 
 			$db->commit();
 
-			$return = ($return === 1);
+			$return = !empty($user_data)
+			 ? $upd_data === 1 AND $upd_proifle === 1
+			 : $upd_proifle === 1;
 
 			$this->trigger_events(array('post_update_user', 'post_update_user_successful'));
 			$this->set_message('update_successful');

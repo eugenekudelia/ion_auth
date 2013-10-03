@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS `groups`;
 
-#
-# Table structure for table 'groups'
-#
+--
+-- Table structure for table 'groups'
+--
 
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS `groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
-#
-# Dumping data for table 'groups'
-#
+--
+-- Dumping data for table 'groups'
+--
 
 INSERT INTO `groups` (`id`, `name`, `title`, `cms`, `permissions`) VALUES
 (1, 'admin', 'Administrator', 1, ''),
@@ -26,58 +26,81 @@ INSERT INTO `groups` (`id`, `name`, `title`, `cms`, `permissions`) VALUES
 
 DROP TABLE IF EXISTS `users`;
 
-#
-# Table structure for table 'users'
-#
+--
+-- Table structure for table 'users'
+--
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `ip_address` varbinary(16) NOT NULL,
+  id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(80) DEFAULT NULL,
   `salt` varchar(40) DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
+  `cms` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `activation_code` varchar(40) DEFAULT NULL,
   `forgotten_password_code` varchar(40) DEFAULT NULL,
   `forgotten_password_time` int(11) unsigned DEFAULT NULL,
   `remember_code` varchar(40) DEFAULT NULL,
-  `created_on` int(11) unsigned NOT NULL,
-  `edited_on` int(11) unsigned DEFAULT NULL,
-  `edited_by` mediumint(8) unsigned DEFAULT NULL,
   `last_login` int(11) unsigned DEFAULT NULL,
   `last_login_ip` varbinary(16) NOT NULL,
   `login_count` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `active` tinyint(1) unsigned DEFAULT NULL,
-  `cms` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `display_name` varchar(100) DEFAULT NULL,
-  `full_name` varchar(100) DEFAULT NULL,
-  `occupation` varchar(100) DEFAULT NULL,
-  `gender` enum('male','female','no_matter') DEFAULT NULL,
-  `public_email` varchar(100) NOT NULL,
-  `skype` varchar(50) DEFAULT NULL,
-  `website` varchar(100) DEFAULT NULL,
-  `dob` int(11) DEFAULT NULL,
-  `locality` text NOT NULL,
-  `comment` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `username` (`username`),
   KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-#
-# Dumping data for table 'users'
-#
+--
+-- Dumping data for table 'users'
+--
 
-INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `edited_on`, `edited_by`, `last_login`, `last_login_ip`, `login_count`, `active`, `cms`, `display_name`, `full_name`, `occupation`, `gender`, `public_email`, `skype`, `website`, `dob`, `locality`, `comment`) VALUES
-(1, 0x7f000001, 'administrator', 'd8a03ff18d3cb85de971d57da4f5a207dee479ac', NULL, 'admin@admin.com', NULL, NULL, NULL, NULL, 1268889823, NULL, NULL, NULL, '', 1, 1, 2, 'Admin Istrator', NULL, NULL, 'male', '', 'ADMIN', '', NULL, '', '');
+INSERT INTO `users` (`id`, `email`, `username`, `password`, `salt`, `cms`, `active`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `last_login`, `last_login_ip`, `login_count`) VALUES
+(1, 'admin@admin.com', 'administrator', 'd8a03ff18d3cb85de971d57da4f5a207dee479ac', NULL, 2, 1, NULL, NULL, NULL, '35986412fcda34803b95979e019cad9c08dc937a', 1380132531, 0x7f000001, 0);
+
+
+DROP TABLE IF EXISTS `profiles`;
+
+--
+-- Table structure for table 'profiles'
+--
+
+CREATE TABLE IF NOT EXISTS `profiles` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` mediumint(8) unsigned NOT NULL,
+  `ip_address` varbinary(16) NOT NULL,
+  `created_on` int(11) unsigned NOT NULL DEFAULT '0',
+  `created_by` mediumint(8) unsigned DEFAULT NULL,
+  `edited_on` int(11) unsigned DEFAULT NULL,
+  `edited_by` mediumint(8) unsigned DEFAULT NULL,
+  `display_name` varchar(100) DEFAULT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
+  `occupation` varchar(200) DEFAULT NULL,
+  `gender` enum('male','female','not_telling') DEFAULT NULL,
+  `avatar` varchar(200) DEFAULT NULL,
+  `public_email` varchar(100) DEFAULT NULL,
+  `skype` varchar(50) DEFAULT NULL,
+  `website` varchar(100) DEFAULT NULL,
+  `dob` int(11) DEFAULT NULL,
+  `locality` text,
+  `comment` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `profiles`
+--
+
+INSERT INTO `profiles` (`id`, `user_id`, `ip_address`, `created_on`, `created_by`, `edited_on`, `edited_by`, `display_name`, `full_name`, `occupation`, `gender`, `avatar`, `public_email`, `skype`, `website`, `dob`, `locality`, `comment`) VALUES
+(1, 1, 0x7f000001, 1268889823, NULL, 1379577394, 1, 'Fröken Bock', 'Fröken Hildur Bock', NULL, 'female', NULL, NULL, 'Fröken-Bock', NULL, NULL, '', '');
 
 
 DROP TABLE IF EXISTS `users_groups`;
 
-#
-# Table structure for table 'users_groups'
-#
+--
+-- Table structure for table 'users_groups'
+--
 
 CREATE TABLE `users_groups` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -98,9 +121,9 @@ INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 
 DROP TABLE IF EXISTS `login_attempts`;
 
-#
-# Table structure for table 'login_attempts'
-#
+--
+-- Table structure for table 'login_attempts'
+--
 
 CREATE TABLE `login_attempts` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

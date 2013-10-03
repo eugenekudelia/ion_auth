@@ -44,7 +44,8 @@ return array(
 		'users'				=> 'users',
 		'groups'			=> 'groups',
 		'users_groups'		=> 'users_groups',
-		'login_attempts'	=> 'login_attempts'
+		'login_attempts'	=> 'login_attempts',
+		'profiles'			=> 'profiles'
 	),
 
 	/*
@@ -127,7 +128,7 @@ return array(
 	'email_activation'          => FALSE,				// Email Activation for registration
 	'manual_activation'         => FALSE,				// Manual Activation for registration
 	'remember_users'            => TRUE, 				// Allow users to be remembered and enable auto-login
-	'user_expire'               => (int) 121E4,			// (121E4 ~= 2 weeks) How long to remember the user (seconds). Set to zero for no expiration
+	'user_expire'               => 610000 * 2,			// How long to remember the user (seconds). Set to zero for no expiration
 	'user_extend_on_login'      => FALSE,				// Extend the users cookies everytime they auto-login
 	'track_login_attempts'      => TRUE,				// Track the number of failed login attempts for each user or ip.
 	'maximum_login_attempts'    => 3,					// The maximum number of failed login attempts.
