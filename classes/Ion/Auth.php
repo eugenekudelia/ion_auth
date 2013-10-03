@@ -547,7 +547,7 @@ class Ion_Auth
 	}
 
 	/**
-	 * is logged in user (default) admin
+	 * is (default) admin logged in user?
 	 *
 	 * @return bool
 	 * @author Eugene Kudelia
@@ -556,10 +556,11 @@ class Ion_Auth
 	{
 		if ($this->logged_in())
 		{
-			$user = is_object($this->user()->row()) ? $this->user()->row()->cms : NULL;
-			if (is_numeric($user))
+			$user = $this->select('cms')->user()->row();
+			$cms = is_object($user) ? $user->cms : NULL;
+			if (is_numeric($cms))
 			{
-				return $default ? $user == 2 : $user > 0;
+				return $default ? $cms == 2 : $cms > 0;
 			}
 		}
 
