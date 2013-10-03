@@ -172,7 +172,7 @@ class Model_Ion_Auth extends Model_Common
 		$this->config = Kohana::$config->load('ion_auth');
 
 		// Create Session instance
-		$this->session = Session::instance($this->config->get('session_type'));
+		$this->session = Session::instance();
 		//initialize db tables data
 		$this->tables  = $this->config->get('tables');
 
@@ -835,7 +835,7 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function register($email, $username, $password, $display_name = NULL, array $groups = array(), array $profile = NULL)
+	public function register($email, $username, $password, $display_name = NULL, $groups = array(), $profile = array())
 	{
 		$this->trigger_events('pre_register');
 
@@ -1484,7 +1484,7 @@ class Model_Ion_Auth extends Model_Common
 		$this->_query($this->tables['profiles']);
 
 		$this->_query
-			->where($this->tables['profiles'].'.'.$this->join['users'], '=', $id)
+			->where($this->join['users'], '=', $id)
 			->limit(1);
 
 		return $this;
@@ -1914,6 +1914,11 @@ class Model_Ion_Auth extends Model_Common
 			// remove user from groups
 			$this->remove_from_group($id);
 
+			//remove user from profiles
+			DB::delete($this->tables['profiles'])
+				->where($this->join['users'], '=', $id)
+				->execute();
+
 			// delete user from users table
 			// should be placed after remove from group
 			$return = DB::delete($this->tables['users'])
@@ -1923,7 +1928,7 @@ class Model_Ion_Auth extends Model_Common
 			$db->commit();
 
 			// if user does not exist in database then it returns FALSE
-			// else removes the user from groups
+			// else removes the user from groups and profiles
 			$return = ($return > 0);
 
 			$this->trigger_events(array('post_delete_user', 'post_delete_user_successful'));

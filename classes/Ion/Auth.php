@@ -287,7 +287,7 @@ class Ion_Auth
 	 * @return bool
 	 * @author Eugene Kudelia
 	 */
-	function new_password_email($username, $password, $email, $new_user = FALSE)
+	function new_password_email($email, $username, $password, $new_user = FALSE)
 	{
 		$site_name = $this->_config()->get('site_title');
 
@@ -345,7 +345,7 @@ class Ion_Auth
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function register($username, $password, $email, $additional_data = array(), $group_ids = array(), $cms = FALSE) //need to test email activation
+	public function register($email, $username, $password, $display_name = NULL, $group_ids = array(), $profile = array(), $cms = FALSE)
 	{
 		$this->ion_auth_model->trigger_events('pre_account_creation');
 
@@ -355,7 +355,7 @@ class Ion_Auth
 
 		if ( ! $email_activation)
 		{
-			$id = $this->ion_auth_model->register($username, $password, $email, $additional_data, $group_ids);
+			$id = $this->ion_auth_model->register($email, $username, $password, $display_name, $group_ids, $profile);
 			if ($id !== FALSE)
 			{
 				$this->set_message('account_creation_successful');
@@ -371,7 +371,7 @@ class Ion_Auth
 		}
 		else
 		{
-			$id = $this->ion_auth_model->register($username, $password, $email, $additional_data, $group_ids);
+			$id = $this->ion_auth_model->register($email, $username, $password, $display_name, $group_ids, $profile);
 
 			if ( ! $id)
 			{
