@@ -850,7 +850,7 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
-		if (is_string($display_name) AND $this->row_exists($this->tables['users'], 'display_name', $display_name))
+		if (is_string($display_name) AND $this->row_exists($this->tables['profiles'], 'display_name', $display_name))
 		{
 			$this->set_error('account_creation_duplicate_display_name');
 			return FALSE;
