@@ -835,7 +835,7 @@ class Model_Ion_Auth extends Model_Common
 	 * @author Mathew
 	 * @kohana Eugene Kudelia
 	 */
-	public function register($email, $username, $password, $display_name = NULL, $groups = array(), $profile = array())
+	public function register($email, $username, $password, $display_name = NULL, array $groups = array(), array $profile = array())
 	{
 		$this->trigger_events('pre_register');
 
