@@ -1191,6 +1191,8 @@ class Model_Ion_Auth extends Model_Common
 	/**
 	 * users
 	 *
+	 * @param  mixed groups
+	 * $param  bool Join profiles
 	 * @return object Users
 	 * @author Ben Edmunds
 	 * @kohana Eugene Kudelia
@@ -1201,42 +1203,16 @@ class Model_Ion_Auth extends Model_Common
 
 		if (isset($this->_select) AND ! empty($this->_select))
 		{
-			$select = array();
-			foreach ($this->_select as $item)
-			{
-				if (is_array($item))
-				{
-					foreach($item as $col)
-					{
-						$select[] = $this->tables['users'].'.'.$col;
-					}
-				}
-				elseif (is_string($item))
-				{
-					$select[] = $this->tables['users'].'.'.$item;
-				}
-			}
+			// List of specified columns - parameter passed to DB::select_array
+			$select = $this->_select_format($this->tables['users'], $this->_select);
 			$this->_select = array();
 
 			if (isset($this->_select_join) AND ! empty($this->_select_join))
 			{
-				$select_join = array();
-				foreach ($this->_select_join as $item)
-				{
-					if (is_array($item))
-					{
-						foreach($item as $col)
-						{
-							$select_join[] = $this->tables['profiles'].'.'.$col;
-						}
-					}
-					elseif (is_string($item))
-					{
-						$select_join[] = $this->tables['profiles'].'.'.$item;
-					}
-				}
-				$select = array_merge($select, $select_join);
+				$select_join = $this->_select_format($this->tables['profiles'], $this->_select_join);
 				$this->_select_join = array();
+
+				$select = array_merge($select, $select_join);
 			}
 
 			$this->_query = DB::select_array($select)->from($this->tables['users']);
