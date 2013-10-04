@@ -1301,66 +1301,8 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		//run each where that was passed
-		if (isset($this->_where) AND ! empty($this->_where))
-		{
-			foreach ($this->_where as $where)
-			{
-				$this->_query->where($where[0], $where[1], $where[2]);
-			}
-
-			$this->_where = array();
-		}
-
-		//run each or_where that was passed
-		if (isset($this->_or_where) AND ! empty($this->_or_where))
-		{
-			foreach ($this->_or_where as $or_where)
-			{
-				$this->_query->or_where($or_where[0], $or_where[1], $or_where[2]);
-			}
-
-			$this->_or_where = array();
-		}
-
-		//if (isset($this->_like) AND ! empty($this->_like))
-		//{
-		//	foreach ($this->_like as $like)
-		//	{
-		//		$this->db->or_like($like);
-		//	}
-		//
-		//	$this->_like = array();
-		//}
-
-		if (isset($this->_limit) AND isset($this->_offset))
-		{
-			$this->_query->limit($this->_limit)->offset($this->_offset);
-
-			$this->_limit  = NULL;
-			$this->_offset = NULL;
-		}
-		elseif (isset($this->_limit))
-		{
-			$this->_query->limit($this->_limit);
-
-			$this->_limit  = NULL;
-		}
-
-		//set the order
-		if (isset($this->_order_by) AND isset($this->_order))
-		{
-			$this->_query->order_by($this->_order_by, $this->_order);
-
-			$this->_order_by = NULL;
-			$this->_order    = NULL;
-		}
-		elseif (isset($this->_order_by))
-		{
-			$this->_query->order_by($this->_order_by);
-
-			$this->_order_by = NULL;
-		}
+		// Database Query Builder limitations and ordering
+		$this->_query_format();
 
 		return $this;
 	}
@@ -1700,56 +1642,8 @@ class Model_Ion_Auth extends Model_Common
 		// Database Query Builder object: $this->_query
 		$this->_query($this->tables['groups']);
 
-		//run each where that was passed
-		if (isset($this->_where) AND ! empty($this->_where))
-		{
-			foreach ($this->_where as $where)
-			{
-				$this->_query->where($where[0], $where[1], $where[2]);
-			}
-
-			$this->_where = array();
-		}
-
-		//run each or_where that was passed
-		if (isset($this->_or_where) AND ! empty($this->_or_where))
-		{
-			foreach ($this->_or_where as $or_where)
-			{
-				$this->_query->or_where($or_where[0], $or_where[1], $or_where[2]);
-			}
-
-			$this->_or_where = array();
-		}
-
-		if (isset($this->_limit) AND isset($this->_offset))
-		{
-			$this->_query->limit($this->_limit, $this->_offset);
-
-			$this->_limit  = NULL;
-			$this->_offset = NULL;
-		}
-		elseif (isset($this->_limit))
-		{
-			$this->_query->limit($this->_limit);
-
-			$this->_limit  = NULL;
-		}
-
-		//set the order
-		if (isset($this->_order_by) AND isset($this->_order))
-		{
-			$this->_query->order_by($this->_order_by, $this->_order);
-
-			$this->_order_by = NULL;
-			$this->_order    = NULL;
-		}
-		elseif (isset($this->_order_by))
-		{
-			$this->_query->order_by($this->_order_by);
-
-			$this->_order_by = NULL;
-		}
+		// Database Query Builder limitations and ordering
+		$this->_query_format();
 
 		return $this;
 	}
