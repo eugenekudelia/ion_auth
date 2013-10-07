@@ -33,21 +33,21 @@ class Model_Ion_Auth extends Model_Common
 	/**
 	 *
 	 */
-	protected $config;
+	protected $_config;
 
 	/**
 	 * Holds an array of tables used
 	 *
 	 * @var array
 	 */
-	public $tables = array();
+	protected $_tables = array();
 
 	/**
 	 * Identity column config
 	 *
 	 * @var string
 	 */
-	public $identity_column;
+	protected $_identity_column;
 
 	/**
 	 * Config items: name of Users table column
@@ -55,35 +55,21 @@ class Model_Ion_Auth extends Model_Common
 	 *
 	 * @var array
 	 */
-	public $join;
-
-	/**
-	 * activation code
-	 *
-	 * @var string
-	 */
-	public $activation_code;
-
-	/**
-	 * forgotten password key
-	 *
-	 * @var string
-	 */
-	public $forgotten_password_code;
+	protected $_join;
 
 	/**
 	 * Store salt
 	 *
 	 * @var bool
 	 */
-	protected $store_salt;
+	protected $_store_salt;
 
 	/**
 	 * Salt length
 	 *
 	 * @var integer
 	 */
-	protected $salt_length;
+	protected $_salt_length;
 
 	/**
 	 * Ion Auth Query Builder properties
@@ -103,35 +89,42 @@ class Model_Ion_Auth extends Model_Common
 	 *
 	 * @var array
 	 */
-	protected $messages = array();
+	protected $_messages = array();
+
+	/**
+	 * message start delimiter
+	 *
+	 * @var string
+	 */
+	protected $_message_start_delimiter;
+
+	/**
+	 * message end delimiter
+	 *
+	 * @var string
+	 */
+	protected $_message_end_delimiter;
 
 	/**
 	 * error message
 	 *
 	 * @var array
 	 */
-	protected $errors = array();
+	protected $_errors = array();
 
 	/**
 	 * error start delimiter
 	 *
 	 * @var string
 	 */
-	protected $error_start_delimiter;
+	protected $_error_start_delimiter;
 
 	/**
 	 * error end delimiter
 	 *
 	 * @var string
 	 */
-	protected $error_end_delimiter;
-
-	/**
-	 * caching of users and their groups
-	 *
-	 * @var array
-	 */
-	public $_cache_user_in_group = array();
+	protected $_error_end_delimiter;
 
 	/**
 	 * caching of groups
@@ -143,12 +136,12 @@ class Model_Ion_Auth extends Model_Common
 	/**
 	 * Session instance
 	 */
-	protected $session;
+	protected $_session;
 
 	/**
 	 * Bcrypt class parameter
 	 */
-	protected $rounds;
+	protected $_rounds;
 
 	/**
 	 *
@@ -165,43 +158,57 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	protected $_cache_user_permissions = array();
 
+	/**
+	 * activation code
+	 *
+	 * @var string
+	 */
+	public $activation_code;
+
+	/**
+	 * caching of users and their groups
+	 *
+	 * @var array
+	 */
+	public $cache_user_in_group = array();
+
 
 	protected function __construct()
 	{
 		// Load Ion Auth config object
-		$this->config = Kohana::$config->load('ion_auth');
+		$this->_config = Kohana::$config->load('ion_auth');
 
 		// Create Session instance
-		$this->session = Session::instance();
+		$this->_session = Session::instance();
 		//initialize db tables data
-		$this->tables  = $this->config->get('tables');
+		$this->_tables  = $this->_config->get('tables');
 
 		// initialize data
-		$this->identity_column = $this->config->get('identity');
-		$this->store_salt      = $this->config->get('store_salt');
-		$this->salt_length     = $this->config->get('salt_length');
-		$this->join			   = $this->config->get('join');
+		$this->_identity_column = $this->_config->get('identity');
+		$this->_store_salt      = $this->_config->get('store_salt');
+		$this->_salt_length     = $this->_config->get('salt_length');
+		$this->_join			   = $this->_config->get('join');
 
 		// initialize messages and error
-		$this->message_start_delimiter = $this->config->get('message_start_delimiter');
-		$this->message_end_delimiter   = $this->config->get('message_end_delimiter');
-		$this->error_start_delimiter   = $this->config->get('error_start_delimiter');
-		$this->error_end_delimiter     = $this->config->get('error_end_delimiter');
+		$this->_message_start_delimiter = $this->_config->get('message_start_delimiter');
+		$this->_message_end_delimiter   = $this->_config->get('message_end_delimiter');
+		$this->_error_start_delimiter   = $this->_config->get('error_start_delimiter');
+		$this->_error_end_delimiter     = $this->_config->get('error_end_delimiter');
 
 		// initialize our hooks object
 		$this->_ion_hooks = new stdClass;
 
 		// set Bcrypt class parameter if needed
-		if ($this->config->get('hash_method') == 'bcrypt')
+		if ($this->_config->get('hash_method') == 'bcrypt')
 		{
-			if ($this->config->get('random_rounds'))
+			if ($this->_config->get('random_rounds'))
 			{
-				$rand = rand($this->config->get('min_rounds'), $this->config->get('max_rounds'));
-				$this->rounds = array('rounds' => $rand);
+				$rand = rand($this->_config->get('min_rounds'), $this->_config->get('max_rounds'));
+				$this->_rounds = array('rounds' => $rand);
 			}
 			else
 			{
-				$this->rounds = array('rounds' => $this->config->get('default_rounds'));
+				$this->_rounds = array('rounds' => $this->_config->get('default_rounds'));
 			}
 		}
 
@@ -216,7 +223,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function _config()
 	{
-		return $this->config;
+		return $this->_config;
 	}
 
 	/**
@@ -227,7 +234,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function _session()
 	{
-		return $this->session;
+		return $this->_session;
 	}
 
 	/**
@@ -256,21 +263,21 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		//bcrypt
-		if ($use_sha1_override === FALSE AND $this->config->get('hash_method') == 'bcrypt')
+		if ($use_sha1_override === FALSE AND $this->_config->get('hash_method') == 'bcrypt')
 		{
-			$bcrypt = new Bcrypt($this->rounds);
+			$bcrypt = new Bcrypt($this->_rounds);
 			return $bcrypt->hash($password);
 		}
 
 		// sha1
-		if ($this->store_salt AND $salt)
+		if ($this->_store_salt AND $salt)
 		{
 			return  sha1($password.$salt);
 		}
 		else
 		{
 			$salt = $this->salt();
-			return  $salt.substr(sha1($salt.$password), 0, -$this->salt_length);
+			return  $salt.substr(sha1($salt.$password), 0, -$this->_salt_length);
 		}
 	}
 
@@ -292,7 +299,7 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('extra_where');
 
 		$hash_password_db = DB::select('password', 'salt')
-					            ->from($this->tables['users'])
+					            ->from($this->_tables['users'])
 								->where('id', '=', $id)
 					            ->limit(1)
 								->execute();
@@ -305,21 +312,21 @@ class Model_Ion_Auth extends Model_Common
 		$hash_password = $hash_password_db->get('password');
 
 		// bcrypt
-		if ($use_sha1_override === FALSE AND $this->config->get('hash_method') == 'bcrypt')
+		if ($use_sha1_override === FALSE AND $this->_config->get('hash_method') == 'bcrypt')
 		{
-			$bcrypt = new Bcrypt($this->rounds);
+			$bcrypt = new Bcrypt($this->_rounds);
 			return $bcrypt->verify($password, $hash_password);
 		}
 
 		// sha1
-		if ($this->store_salt)
+		if ($this->_store_salt)
 		{
 			$db_password = sha1($password.$hash_password_db->get('salt'));
 		}
 		else
 		{
-			$salt = substr($hash_password, 0, $this->salt_length);
-			$db_password =  $salt.substr(sha1($salt.$password), 0, -$this->salt_length);
+			$salt = substr($hash_password, 0, $this->_salt_length);
+			$db_password =  $salt.substr(sha1($salt.$password), 0, -$this->_salt_length);
 		}
 
 		return $db_password == $hash_password;
@@ -344,7 +351,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function salt()
 	{
-		return substr(md5(uniqid(rand(), true)), 0, $this->salt_length);
+		return substr(md5(uniqid(rand(), true)), 0, $this->_salt_length);
 	}
 
 	/**
@@ -369,8 +376,8 @@ class Model_Ion_Auth extends Model_Common
 
 		if ($code !== FALSE)
 		{
-			$query = DB::select($this->identity_column)
-						->from($this->tables['users'])
+			$query = DB::select($this->_identity_column)
+						->from($this->_tables['users'])
 			            ->where('activation_code', '=', $code)
 			            ->limit(1)
 						->execute();
@@ -383,7 +390,7 @@ class Model_Ion_Auth extends Model_Common
 				return FALSE;
 			}
 
-			$column = $this->identity_column;
+			$column = $this->_identity_column;
 			$value = $query->get($column);
 		}
 		else
@@ -399,7 +406,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($data)
 							->where($column, '=', $value)
 							->execute();
@@ -440,7 +447,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($data)
 							->where('id', '=', $id)
 							->execute();
@@ -471,7 +478,7 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		$rows = DB::select('forgotten_password_code')
-					->from($this->tables['users'])
+					->from($this->_tables['users'])
 					->where('forgotten_password_code', '=', $code)
 					->execute();
 
@@ -482,7 +489,7 @@ class Model_Ion_Auth extends Model_Common
 			    'forgotten_password_time' => NULL
 			);
 
-			DB::update($this->tables['users'])
+			DB::update($this->_tables['users'])
 				->set($data)
 				->where('forgotten_password_code', '=', $code)
 				->execute();
@@ -504,7 +511,7 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('pre_change_password');
 
-		if ( ! $this->row_exists($this->tables['users'], $this->identity_column, $identity))
+		if ( ! $this->row_exists($this->_tables['users'], $this->_identity_column, $identity))
 		{
 			$this->trigger_events(array('post_change_password', 'post_change_password_unsuccessful'));
 			return FALSE;
@@ -513,8 +520,8 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('extra_where');
 
 		$query = DB::select('salt')
-		            ->from($this->tables['users'])
-		            ->where($this->identity_column, '=', $identity)
+		            ->from($this->_tables['users'])
+		            ->where($this->_identity_column, '=', $identity)
 		            ->limit(1)
 					->execute();
 
@@ -541,14 +548,14 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_where');
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($data)
-							->where($this->identity_column, '=', $identity)
+							->where($this->_identity_column, '=', $identity)
 							->execute();
 
 		if ($return = ($affected_rows === 1))
 		{
-			$this->session_reset();
+			$this->_session_reset();
 
 			$this->trigger_events(array('post_change_password', 'post_change_password_successful'));
 			$this->set_message('password_change_successful');
@@ -571,8 +578,8 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function change_password($identity, $old = NULL, $new)
 	{
-		if (strlen($new) < $this->config->get('min_password_length') OR
-			strlen($new) > $this->config->get('max_password_length'))
+		if (strlen($new) < $this->_config->get('min_password_length') OR
+			strlen($new) > $this->_config->get('max_password_length'))
 		{
 			$this->set_error('password_change_unsuccessful');
 			return FALSE;
@@ -583,8 +590,8 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('extra_where');
 
 		$query = DB::select('id', 'email', 'username', 'salt', 'last_login')
-		            ->from($this->tables['users'])
-		            ->where($this->identity_column, '=', $identity)
+		            ->from($this->_tables['users'])
+		            ->where($this->_identity_column, '=', $identity)
 		            ->limit(1)
 					->as_object()
 					->execute();
@@ -598,7 +605,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$user = $query->current();
 
-		if ( ! ($self = $user->id == $this->session->get('user_id')))
+		if ( ! ($self = $user->id == $this->_session->get('user_id')))
 		{
 			$this->set_error('identity_mismatch');
 			return NULL;
@@ -628,21 +635,21 @@ class Model_Ion_Auth extends Model_Common
 
 			$this->trigger_events('extra_where');
 
-			$affected_rows = DB::update($this->tables['users'])
+			$affected_rows = DB::update($this->_tables['users'])
 								->set($data)
-								->where($this->identity_column, '=', $identity)
+								->where($this->_identity_column, '=', $identity)
 								->execute();
 
 			if ($return = ($affected_rows === 1))
 			{
 				if ($self)
 				{
-					$this->session->regenerate();
+					$this->_session->regenerate();
 				
 					$this->set_session($user);
 					$this->clear_login_attempts($identity);
 				
-					if ($remember AND $this->config->get('remember_users'))
+					if ($remember AND $this->_config->get('remember_users'))
 					{
 						$this->remember_user($user->id);
 					}
@@ -700,8 +707,6 @@ class Model_Ion_Auth extends Model_Common
 		
 		$key = $this->hash_code($activation_code_part.$identity);
 
-		$this->forgotten_password_code = $key;
-
 		$this->trigger_events('extra_where');
 
 		$update = array(
@@ -709,9 +714,9 @@ class Model_Ion_Auth extends Model_Common
 		    'forgotten_password_time' => time()
 		);
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($update)
-							->where($this->identity_column, '=', $identity)
+							->where($this->_identity_column, '=', $identity)
 							->execute();
 
 		if ($return = ($affected_rows === 1))
@@ -744,7 +749,7 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		$query = DB::select('forgotten_password_time')
-		            ->from($this->tables['users'])
+		            ->from($this->_tables['users'])
 		            ->where('forgotten_password_code', '=', $code)
 		            ->limit(1)
 					->as_object()
@@ -759,7 +764,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$forgotten_password_time = $query->current()->forgotten_password_time; //pass the code to profile
 
-		if (($expiration = $this->config->get('forgot_password_expiration')) > 0)
+		if (($expiration = $this->_config->get('forgot_password_expiration')) > 0)
 		{
 			//Make sure it isn't expired
 			if (time() - $forgotten_password_time > $expiration)
@@ -781,7 +786,7 @@ class Model_Ion_Auth extends Model_Common
 		    'active'                  => 1,
 		);
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($data)
 							->where('forgotten_password_code', '=', $code)
 							->execute();
@@ -806,13 +811,13 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function forgotten_password_identity($email, $login = NULL)
 	{
-		$identity = $this->config->get('identity');
+		$identity = $this->_config->get('identity');
 
 		$query = DB::select($identity)
-					->from($this->tables['users'])
+					->from($this->_tables['users'])
 					->where('email', '=', $email);
 
-		if (is_string($login) AND strlen($login) >= $this->config->get('min_username_length'))
+		if (is_string($login) AND strlen($login) >= $this->_config->get('min_username_length'))
 		{
 			$query = $query->where($identity, '=', $login);
 		}
@@ -839,28 +844,28 @@ class Model_Ion_Auth extends Model_Common
 	{
 		$this->trigger_events('pre_register');
 
-		if ($this->identity_column == 'email' AND $this->row_exists($this->tables['users'], 'email', $email))
+		if ($this->_identity_column == 'email' AND $this->row_exists($this->_tables['users'], 'email', $email))
 		{
 			$this->set_error('account_creation_duplicate_email');
 			return FALSE;
 		}
-		elseif ($this->identity_column == 'username' AND $this->row_exists($this->tables['users'], 'username', $username))
+		elseif ($this->_identity_column == 'username' AND $this->row_exists($this->_tables['users'], 'username', $username))
 		{
 			$this->set_error('account_creation_duplicate_username');
 			return FALSE;
 		}
 
-		if (is_string($display_name) AND $this->row_exists($this->tables['profiles'], 'display_name', $display_name))
+		if (is_string($display_name) AND $this->row_exists($this->_tables['profiles'], 'display_name', $display_name))
 		{
 			$this->set_error('account_creation_duplicate_display_name');
 			return FALSE;
 		}
 
 		// If username is taken, use username1 or username2, etc.
-		if ($this->identity_column != 'username')
+		if ($this->_identity_column != 'username')
 		{
 			$original_username = $username;
-			for ($i = 0; $this->row_exists($this->tables['users'], 'username', $username); $i++)
+			for ($i = 0; $this->row_exists($this->_tables['users'], 'username', $username); $i++)
 			{
 				if ($i > 0)
 				{
@@ -869,17 +874,17 @@ class Model_Ion_Auth extends Model_Common
 			}
 		}
 
-		$salt       = $this->store_salt ? $this->salt() : FALSE;
+		$salt       = $this->_store_salt ? $this->salt() : FALSE;
 		$password   = $this->hash_password($password, $salt);
 
-		$active = (int) ($this->config->get('manual_activation') === FALSE);
+		$active = (int) ($this->_config->get('manual_activation') === FALSE);
 
 		$cms = 0;
 		if (count(array_intersect($this->manager_groups(), $groups)) > 0)
 		{
 			$cms = 1;
 		}
-		if (in_array($this->group_id($this->config->get('default_admin')), $groups))
+		if (in_array($this->group_id($this->_config->get('default_admin')), $groups))
 		{
 			$cms = 2;
 		}
@@ -893,7 +898,7 @@ class Model_Ion_Auth extends Model_Common
 		    'active'		=> $active
 		);
 
-		if ($this->store_salt)
+		if ($this->_store_salt)
 		{
 			$data['salt'] = $salt;
 		}
@@ -905,14 +910,14 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('extra_set');
 
-		list($id, $rows) = DB::insert($this->tables['users'])
+		list($id, $rows) = DB::insert($this->_tables['users'])
 								->columns($columns)
 								->values($values)
 								->execute();
 
 		if ($rows === 1)
 		{
-			$default_group = $this->group_id($this->config->get('default_group'));
+			$default_group = $this->group_id($this->_config->get('default_group'));
 
 			if ( ! in_array($default_group, $groups))
 			{
@@ -930,7 +935,7 @@ class Model_Ion_Auth extends Model_Common
 				'user_id'		=> $id,
 			    'ip_address'	=> $this->_ip_address(),
 			    'created_on'	=> time(),
-			    'created_by'	=> $this->session->get('user_id'),
+			    'created_by'	=> $this->_session->get('user_id'),
 				'display_name'	=> $display_name
 			);
 
@@ -938,19 +943,19 @@ class Model_Ion_Auth extends Model_Common
 			{
 				//filter out any data passed that doesnt have a matching column in the profiles table
 				//and merge the set user data and the profile
-				$user_data = array_merge($user_data, $this->_filter_data($this->tables['profiles'], $profile));
+				$user_data = array_merge($user_data, $this->_filter_data($this->_tables['profiles'], $profile));
 			}
 			$profiles_columns = array_keys($user_data);
 			$profiles_values = array_values($user_data);
 
-			list($profile_id, $profile_rows) = DB::insert($this->tables['profiles'])
+			list($profile_id, $profile_rows) = DB::insert($this->_tables['profiles'])
 				->columns($profiles_columns)
 				->values($profiles_values)
 				->execute();
 
 			if ($profile_rows !== 1)
 			{
-				DB::delete($this->tables['users'])->where('id', '=', $id)->execute();
+				DB::delete($this->_tables['users'])->where('id', '=', $id)->execute();
 				return FALSE;
 			}
 
@@ -993,8 +998,8 @@ class Model_Ion_Auth extends Model_Common
 
 		$query = DB::select('id', 'email', 'username',
 							'cms', 'active', 'last_login')
-		                  ->from($this->tables['users'])
-		                  ->where($this->identity_column, '=', $identity)
+		                  ->from($this->_tables['users'])
+		                  ->where($this->_identity_column, '=', $identity)
 		                  ->limit(1)
 						  ->as_object()
 						  ->execute();
@@ -1022,7 +1027,7 @@ class Model_Ion_Auth extends Model_Common
 				$this->update_last_login($user->id);
 				$this->clear_login_attempts($identity);
 
-				if ($remember AND $this->config->get('remember_users'))
+				if ($remember AND $this->_config->get('remember_users'))
 				{
 					$this->remember_user($user->id);
 				}
@@ -1059,9 +1064,9 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function is_max_login_attempts_exceeded($identity)
 	{
-		if ($this->config->get('track_login_attempts'))
+		if ($this->_config->get('track_login_attempts'))
 		{
-			$max_attempts = $this->config->get('maximum_login_attempts');
+			$max_attempts = $this->_config->get('maximum_login_attempts');
 			if ($max_attempts > 0)
 			{
 				$attempts = $this->get_attempts_num($identity);
@@ -1082,10 +1087,10 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	function get_attempts_num($identity)
 	{
-		if ($this->config->get('track_login_attempts'))
+		if ($this->_config->get('track_login_attempts'))
 		{
 			$query = DB::select()
-						->from($this->tables['login_attempts'])
+						->from($this->_tables['login_attempts'])
 						->where('ip_address', '=', $this->_ip_address());
 
 			if (strlen($identity) > 0)
@@ -1108,7 +1113,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function is_time_locked_out($identity)
 	{
-		return $this->is_max_login_attempts_exceeded($identity) AND $this->get_last_attempt_time($identity) > time() - $this->config->get('lockout_time');
+		return $this->is_max_login_attempts_exceeded($identity) AND $this->get_last_attempt_time($identity) > time() - $this->_config->get('lockout_time');
 	}
 
 	/**
@@ -1120,10 +1125,10 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function get_last_attempt_time($identity)
 	{
-		if ($this->config->get('track_login_attempts'))
+		if ($this->_config->get('track_login_attempts'))
 		{
 			$query = DB::select(array(DB::expr('MAX(`time`)'), 'time'))
-						->from($this->tables['login_attempts'])
+						->from($this->_tables['login_attempts'])
 						->where('ip_address', '=', $this->_ip_address());
 
 			if (strlen($identity) > 0)
@@ -1148,9 +1153,9 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function increase_login_attempts($identity)
 	{
-		if ($this->config->get('track_login_attempts'))
+		if ($this->_config->get('track_login_attempts'))
 		{
-			list($id, $rows) = DB::insert($this->tables['login_attempts'])
+			list($id, $rows) = DB::insert($this->_tables['login_attempts'])
 									->columns(array('ip_address', 'login', 'time'))
 									->values(array($this->_ip_address(), $identity, time()))
 									->execute();
@@ -1170,9 +1175,9 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function clear_login_attempts($identity, $expire_period = 86400)
 	{
-		if ($this->config->get('track_login_attempts'))
+		if ($this->_config->get('track_login_attempts'))
 		{
-			return DB::delete($this->tables['login_attempts'])
+			return DB::delete($this->_tables['login_attempts'])
 						->where('ip_address', '=', $this->_ip_address())
 						->and_where('login', '=', $identity)
 						->or_where('time', '<', time() - $expire_period) // Purge obsolete login attempts
@@ -1204,37 +1209,37 @@ class Model_Ion_Auth extends Model_Common
 		if (isset($this->_select) AND ! empty($this->_select))
 		{
 			// List of specified columns - parameter passed to DB::select_array
-			$select = $this->_select_format($this->tables['users'], $this->_select);
+			$select = $this->_select_format($this->_tables['users'], $this->_select);
 			$this->_select = array();
 
 			if (isset($this->_select_join) AND ! empty($this->_select_join))
 			{
-				$select_join = $this->_select_format($this->tables['profiles'], $this->_select_join);
+				$select_join = $this->_select_format($this->_tables['profiles'], $this->_select_join);
 				$this->_select_join = array();
 
 				$select = array_merge($select, $select_join);
 			}
 
-			$this->_query = DB::select_array($select)->from($this->tables['users']);
+			$this->_query = DB::select_array($select)->from($this->_tables['users']);
 		}
 		else
 		{
 			$select = array(
-				$this->tables['users'].'.*',
-				array($this->tables['users'].'.id', 'id'),
-				array($this->tables['users'].'.id', 'user_id')
+				$this->_tables['users'].'.*',
+				array($this->_tables['users'].'.id', 'id'),
+				array($this->_tables['users'].'.id', 'user_id')
 			);
-			! $profiles OR $select = array_merge($select, array($this->tables['profiles'].'.*'));
+			! $profiles OR $select = array_merge($select, array($this->_tables['profiles'].'.*'));
 
-			$this->_query = DB::select_array($select)->from($this->tables['users']);
+			$this->_query = DB::select_array($select)->from($this->_tables['users']);
 		}
 
 		// Users join Profiles
 		if ((isset($select_join) AND ! empty($select_join)) OR $profiles)
 		{
 			$this->_query
-				->join($this->tables['profiles'])
-				->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
+				->join($this->_tables['profiles'])
+				->on($this->_tables['profiles'].'.'.$this->_join['users'], '=', $this->_tables['users'].'.id');
 		}
 
 		//filter by group id(s) if passed
@@ -1251,14 +1256,14 @@ class Model_Ion_Auth extends Model_Common
 			{
 				$this->_query
 					->distinct(TRUE)
-					->join($this->tables['users_groups'], 'INNER')
-					->on($this->tables['users_groups'].'.'.$this->join['users'], '=', $this->tables['users'].'.id')
-					->where($this->tables['users_groups'].'.'.$this->join['groups'], 'IN', $groups);
+					->join($this->_tables['users_groups'], 'INNER')
+					->on($this->_tables['users_groups'].'.'.$this->_join['users'], '=', $this->_tables['users'].'.id')
+					->where($this->_tables['users_groups'].'.'.$this->_join['groups'], 'IN', $groups);
 
-				if (in_array($this->group_id($this->config->get('default_group')), $groups) AND count($groups) == 1)
+				if (in_array($this->group_id($this->_config->get('default_group')), $groups) AND count($groups) == 1)
 				{
-					//$this->_query->where($this->tables['users'].'.id', 'NOT IN', $this->manager_users());
-					$this->_query->where($this->tables['users'].'.cms', '=', 0);
+					//$this->_query->where($this->_tables['users'].'.id', 'NOT IN', $this->manager_users());
+					$this->_query->where($this->_tables['users'].'.cms', '=', 0);
 				}
 			}
 		}
@@ -1280,7 +1285,7 @@ class Model_Ion_Auth extends Model_Common
 	public function users_count()
 	{
 		return DB::select('id')
-					->from($this->tables['users'])
+					->from($this->_tables['users'])
 					->execute()
 					->count();
 	}
@@ -1293,12 +1298,12 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function manager_users()
 	{
-		$query = DB::select($this->tables['users'].'.id')
-					->from($this->tables['users'])
+		$query = DB::select($this->_tables['users'].'.id')
+					->from($this->_tables['users'])
 					->distinct(TRUE)
-					->join($this->tables['users_groups'], 'INNER')
-					->on($this->tables['users_groups'].'.'.$this->join['users'], '=', $this->tables['users'].'.id')
-					->where($this->tables['users_groups'].'.'.$this->join['groups'], 'IN', $this->manager_groups())
+					->join($this->_tables['users_groups'], 'INNER')
+					->on($this->_tables['users_groups'].'.'.$this->_join['users'], '=', $this->_tables['users'].'.id')
+					->where($this->_tables['users_groups'].'.'.$this->_join['groups'], 'IN', $this->manager_groups())
 					->execute();
 
 		$users = array();
@@ -1317,9 +1322,9 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function manager_groups()
 	{
-		$query = DB::select('id', $this->config->get('cms_access'))
-					->from($this->tables['groups'])
-					->where($this->config->get('cms_access'), '=', 1)
+		$query = DB::select('id', $this->_config->get('cms_access'))
+					->from($this->_tables['groups'])
+					->where($this->_config->get('cms_access'), '=', 1)
 					->execute();
 
 		$groups = array();
@@ -1344,7 +1349,7 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		$this->_group_id[$name] = DB::select('id')
-			->from($this->tables['groups'])
+			->from($this->_tables['groups'])
 			->where('name', '=', $name)
 			->limit(1)
 			->execute()
@@ -1365,9 +1370,9 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('user');
 
 		//if no id was passed use the current users id
-		$id OR $id = $this->session->get('user_id');
+		$id OR $id = $this->_session->get('user_id');
 
-		$this->where($this->tables['users'].'.id', '=', $id)
+		$this->where($this->_tables['users'].'.id', '=', $id)
 			->limit(1)
 			->users(NULL, $profile);
 
@@ -1385,13 +1390,13 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('profile');
 
 		//if no id was passed use the current users id
-		$id OR $id = $this->session->get('user_id');
+		$id OR $id = $this->_session->get('user_id');
 
 		// Database Query Builder object: $this->_query
-		$this->_query($this->tables['profiles']);
+		$this->_query($this->_tables['profiles']);
 
 		$this->_query
-			->where($this->join['users'], '=', $id)
+			->where($this->_join['users'], '=', $id)
 			->limit(1);
 
 		return $this;
@@ -1409,23 +1414,23 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('get_users_group');
 
 		//if no id was passed use the current users id
-		$id OR $id = $this->session->get('user_id');
+		$id OR $id = $this->_session->get('user_id');
 
 		$query =  DB::select(
-			array($this->tables['users_groups'].'.'.$this->join['groups'], 'id'),
-			$this->tables['groups'].'.name',
-			$this->tables['groups'].'.title',
-			$this->tables['groups'].'.cms'
+			array($this->_tables['users_groups'].'.'.$this->_join['groups'], 'id'),
+			$this->_tables['groups'].'.name',
+			$this->_tables['groups'].'.title',
+			$this->_tables['groups'].'.cms'
 		)
-			->from($this->tables['users_groups'])
-			->where($this->tables['users_groups'].'.'.$this->join['users'], '=', $id)
-			->join($this->tables['groups'])
-			->on($this->tables['users_groups'].'.'.$this->join['groups'], '=', $this->tables['groups'].'.id');
+			->from($this->_tables['users_groups'])
+			->where($this->_tables['users_groups'].'.'.$this->_join['users'], '=', $id)
+			->join($this->_tables['groups'])
+			->on($this->_tables['users_groups'].'.'.$this->_join['groups'], '=', $this->_tables['groups'].'.id');
 
 		if (is_array($order_by))
 		{
 			$order = $order_by[$column = key($order_by)] ;
-			$query->order_by($this->tables['groups'].'.'.$column, $order);
+			$query->order_by($this->_tables['groups'].'.'.$column, $order);
 		}
 
 		if ($as_object)
@@ -1447,18 +1452,18 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('get_users_permissions');
 
 		//if no id was passed use the current users id
-		$id OR $id = $this->session->get('user_id');
+		$id OR $id = $this->_session->get('user_id');
 
 		if (isset($this->_cache_user_permissions[$id]) AND ! $groups_update)
 		{
 			return $this->_cache_user_permissions[$id];
 		}
 
-		$query = DB::select($this->tables['groups'].'.permissions')
-			->from($this->tables['groups'])
-			->join($this->tables['users_groups'])
-			->on($this->tables['groups'].'.id', '=', $this->tables['users_groups'].'.'.$this->join['groups'])
-			->where($this->tables['users_groups'].'.'.$this->join['users'], '=', $id)
+		$query = DB::select($this->_tables['groups'].'.permissions')
+			->from($this->_tables['groups'])
+			->join($this->_tables['users_groups'])
+			->on($this->_tables['groups'].'.id', '=', $this->_tables['users_groups'].'.'.$this->_join['groups'])
+			->where($this->_tables['users_groups'].'.'.$this->_join['users'], '=', $id)
 			->execute();
 
 		if ($query->count() > 0)
@@ -1493,12 +1498,12 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('add_to_group');
 
 		//if no id was passed use the current users id
-		$user_id OR $user_id = $this->session->get('user_id');
+		$user_id OR $user_id = $this->_session->get('user_id');
 
 		$rows = DB::select()
-						->from($this->tables['users_groups'])
-						->where($this->join['groups'], '=', (int) $group_id)
-						->where($this->join['users'], '=', (int) $user_id)
+						->from($this->_tables['users_groups'])
+						->where($this->_join['groups'], '=', (int) $group_id)
+						->where($this->_join['users'], '=', (int) $user_id)
 						->execute()
 						->count();
 
@@ -1510,8 +1515,8 @@ class Model_Ion_Auth extends Model_Common
 
 		unset($rows);
 
-		list($id, $rows) = DB::insert($this->tables['users_groups'])
-								->columns(array($this->join['groups'], $this->join['users']))
+		list($id, $rows) = DB::insert($this->_tables['users_groups'])
+								->columns(array($this->_join['groups'], $this->_join['users']))
 								->values(array((int) $group_id, (int) $user_id))
 								->execute();
 
@@ -1528,7 +1533,7 @@ class Model_Ion_Auth extends Model_Common
 				$this->_cache_groups[$group_id] = $group_name;
 			}
 
-			$this->_cache_user_in_group[$user_id][$group_id] = $group_name;
+			$this->cache_user_in_group[$user_id][$group_id] = $group_name;
 		}
 
 		return $return;
@@ -1561,14 +1566,14 @@ class Model_Ion_Auth extends Model_Common
 
 			foreach($group_ids as $group_id)
 			{
-				$result = DB::delete($this->tables['users_groups'])
-							->where($this->join['groups'], '=', (int) $group_id)
-							->where($this->join['users'], '=', (int) $user_id)
+				$result = DB::delete($this->_tables['users_groups'])
+							->where($this->_join['groups'], '=', (int) $group_id)
+							->where($this->_join['users'], '=', (int) $user_id)
 							->execute();
 
-				if ($result AND isset($this->_cache_user_in_group[$user_id]) AND isset($this->_cache_user_in_group[$user_id][$group_id]))
+				if ($result AND isset($this->cache_user_in_group[$user_id]) AND isset($this->cache_user_in_group[$user_id][$group_id]))
 				{
-					unset($this->_cache_user_in_group[$user_id][$group_id]);
+					unset($this->cache_user_in_group[$user_id][$group_id]);
 				}
 
 				$r[] = $result;
@@ -1579,13 +1584,13 @@ class Model_Ion_Auth extends Model_Common
 		// otherwise remove user from all groups
 		else
 		{
-			$return = DB::delete($this->tables['users_groups'])
-						->where($this->join['users'], '=', (int) $user_id)
+			$return = DB::delete($this->_tables['users_groups'])
+						->where($this->_join['users'], '=', (int) $user_id)
 						->execute();
 
 			if ($return)
 			{
-				$this->_cache_user_in_group[$user_id] = array();
+				$this->cache_user_in_group[$user_id] = array();
 			}
 
 			return (bool) $return;
@@ -1604,7 +1609,7 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('groups');
 
 		// Database Query Builder object: $this->_query
-		$this->_query($this->tables['groups']);
+		$this->_query($this->_tables['groups']);
 
 		// Database Query Builder limitations and ordering
 		$this->_query_format();
@@ -1625,7 +1630,7 @@ class Model_Ion_Auth extends Model_Common
 
 		if (isset($id))
 		{
-			$this->where($this->tables['groups'].'.id', '=', $id);
+			$this->where($this->_tables['groups'].'.id', '=', $id);
 		}
 
 		$this->limit(1)->groups();
@@ -1648,7 +1653,7 @@ class Model_Ion_Auth extends Model_Common
 
 		$this->trigger_events('group_by_name');
 
-		$this->where($this->tables['groups'].'.name', '=', $name);
+		$this->where($this->_tables['groups'].'.name', '=', $name);
 		$this->limit(1)->groups();
 
 		return $this;
@@ -1673,11 +1678,11 @@ class Model_Ion_Auth extends Model_Common
 
 		$user = $this->user($id)->row();
 
-		if (array_key_exists($this->identity_column, $user_data)
-			AND $this->row_exists($this->tables['users'], $this->identity_column, $user_data[$this->identity_column])
-			AND $user->{$this->identity_column} !== $user_data[$this->identity_column])
+		if (array_key_exists($this->_identity_column, $user_data)
+			AND $this->row_exists($this->_tables['users'], $this->_identity_column, $user_data[$this->_identity_column])
+			AND $user->{$this->_identity_column} !== $user_data[$this->_identity_column])
 		{
-			$this->set_error('account_creation_duplicate_'.$this->identity_column);
+			$this->set_error('account_creation_duplicate_'.$this->_identity_column);
 
 			$this->trigger_events(array('post_update_user', 'post_update_user_unsuccessful'));
 			$this->set_error('update_unsuccessful');
@@ -1694,8 +1699,8 @@ class Model_Ion_Auth extends Model_Common
 		$db->begin();
 
 		// Filter the data passed
-		$user_data = $this->_filter_data($this->tables['users'], $user_data, $db);
-		$profile = $this->_filter_data($this->tables['profiles'], $profile, $db);
+		$user_data = $this->_filter_data($this->_tables['users'], $user_data, $db);
+		$profile = $this->_filter_data($this->_tables['profiles'], $profile, $db);
 
 		if (array_key_exists('username', $user_data) OR array_key_exists('password', $user_data) OR array_key_exists('email', $user_data))
 		{
@@ -1714,7 +1719,7 @@ class Model_Ion_Auth extends Model_Common
 		}
 
 		$profile['edited_on'] = time();
-		$profile['edited_by'] = $this->session->get('user_id');
+		$profile['edited_by'] = $this->_session->get('user_id');
 
 		try
 		{
@@ -1722,12 +1727,12 @@ class Model_Ion_Auth extends Model_Common
 
 			if ( ! empty($user_data))
 			{
-				$upd_data = DB::update($this->tables['users'])
+				$upd_data = DB::update($this->_tables['users'])
 								->set($user_data)
 								->where('id', '=', $user->id)
 								->execute();
 			}
-			$upd_proifle = DB::update($this->tables['profiles'])
+			$upd_proifle = DB::update($this->_tables['profiles'])
 							->set($profile)
 							->where('user_id', '=', $user->id)
 							->execute();
@@ -1774,13 +1779,13 @@ class Model_Ion_Auth extends Model_Common
 			$this->remove_from_group($id);
 
 			//remove user from profiles
-			DB::delete($this->tables['profiles'])
-				->where($this->join['users'], '=', $id)
+			DB::delete($this->_tables['profiles'])
+				->where($this->_join['users'], '=', $id)
 				->execute();
 
 			// delete user from users table
 			// should be placed after remove from group
-			$return = DB::delete($this->tables['users'])
+			$return = DB::delete($this->_tables['users'])
 						->where('id', '=', $id)
 						->execute();
 
@@ -1826,7 +1831,7 @@ class Model_Ion_Auth extends Model_Common
 			'login_count' => DB::expr('login_count + 1')
 		);
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set($data)
 							->where('id', '=', $id)
 							->execute();
@@ -1846,7 +1851,7 @@ class Model_Ion_Auth extends Model_Common
 		$this->trigger_events('pre_set_session');
 
 		$session_data = array(
-		    'identity'			=> $user->{$this->identity_column},
+		    'identity'			=> $user->{$this->_identity_column},
 		    'username'			=> $user->username,
 		    'email'				=> $user->email,
 		    'user_id'			=> $user->id, //everyone likes to overwrite id so we'll use user_id
@@ -1855,7 +1860,7 @@ class Model_Ion_Auth extends Model_Common
 
 		foreach ($session_data as $key => $value)
 		{
-			$this->session->set($key, $value);
+			$this->_session->set($key, $value);
 		}
 
 		$this->trigger_events('post_set_session');
@@ -1871,7 +1876,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function session_reset()
 	{
-		if ($this->session->restart())
+		if ($this->_session->restart())
 		{
 			// delete the remember and identity cookies if they exist
 			if (Cookie::get('identity'))
@@ -1907,7 +1912,7 @@ class Model_Ion_Auth extends Model_Common
 		$user = $this->user($id)->row();
 		$salt = sha1($user->password);
 
-		$affected_rows = DB::update($this->tables['users'])
+		$affected_rows = DB::update($this->_tables['users'])
 							->set(array('remember_code' => $salt))
 							->where('id', '=', $id)
 							->execute();
@@ -1915,17 +1920,17 @@ class Model_Ion_Auth extends Model_Common
 		if ($affected_rows > -1)
 		{
 			// if the user_expire is set to zero we'll set the expiration 6 months from now.
-			if ($this->config->get('user_expire') === 0)
+			if ($this->_config->get('user_expire') === 0)
 			{
 				$expire = (int) 16E6; // ~= 185 days
 			}
 			// otherwise use what is set
 			else
 			{
-				$expire = $this->config->get('user_expire');
+				$expire = $this->_config->get('user_expire');
 			}
 
-			Cookie::set('identity', $user->{$this->identity_column}, $expire);
+			Cookie::set('identity', $user->{$this->_identity_column}, $expire);
 			Cookie::set('remember_code', $salt, $expire);
 
 			$this->trigger_events(array('post_remember_user', 'remember_user_successful'));
@@ -1952,7 +1957,7 @@ class Model_Ion_Auth extends Model_Common
 		//check for valid data
 		if ( ! Cookie::get('identity', '')
 			OR ! Cookie::get('remember_code', '')
-			OR ! $this->row_exists($this->tables['users'], $this->identity_column, Cookie::get('identity', '')))
+			OR ! $this->row_exists($this->_tables['users'], $this->_identity_column, Cookie::get('identity', '')))
 		{
 			$this->trigger_events(array('post_login_remembered_user', 'post_login_remembered_user_unsuccessful'));
 
@@ -1962,9 +1967,9 @@ class Model_Ion_Auth extends Model_Common
 		//get the user
 		$this->trigger_events('extra_where');
 
-		$query = DB::select($this->identity_column, 'id', 'username', 'email', 'last_login')
-					->from($this->tables['users'])
-					->where($this->identity_column, '=', Cookie::get('identity'))
+		$query = DB::select($this->_identity_column, 'id', 'username', 'email', 'last_login')
+					->from($this->_tables['users'])
+					->where($this->_identity_column, '=', Cookie::get('identity'))
 					->where('remember_code', '=', Cookie::get('remember_code'))
 					->limit(1)
 					->as_object()
@@ -1978,7 +1983,7 @@ class Model_Ion_Auth extends Model_Common
 			$this->set_session($user);
 
 			//extend the users cookies if the option is enabled
-			if ($this->config->get('user_extend_on_login'))
+			if ($this->_config->get('user_extend_on_login'))
 			{
 				$this->remember_user($user->id);
 			}
@@ -2013,14 +2018,14 @@ class Model_Ion_Auth extends Model_Common
 		! is_string($title) OR $title = trim($title);
 		! empty($title) OR $title = ucfirst($name);
 
-		if ($this->row_exists($this->tables['groups'], 'name', $name))
+		if ($this->row_exists($this->_tables['groups'], 'name', $name))
 		{
 			$this->set_error('group_already_exists');
 
 			return FALSE;
 		}
 
-		list($id, $rows) = DB::insert($this->tables['groups'])
+		list($id, $rows) = DB::insert($this->_tables['groups'])
 							->columns(array('name', 'title', 'cms'))
 							->values(array($name, $title, $cms))
 							->execute();
@@ -2054,14 +2059,14 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
-		if ($this->row_exists($this->tables['groups'], 'title', $title))
+		if ($this->row_exists($this->_tables['groups'], 'title', $title))
 		{
 			$this->set_error('group_title_already_exists');
 
 			return FALSE;
 		}
 
-		$affected_rows = DB::update($this->tables['groups'])
+		$affected_rows = DB::update($this->_tables['groups'])
 							->set(array('title' => $title))
 							->where('id', '=', $id)
 							->execute();
@@ -2093,7 +2098,7 @@ class Model_Ion_Auth extends Model_Common
 			return FALSE;
 		}
 
-		$affected_rows = DB::update($this->tables['groups'])
+		$affected_rows = DB::update($this->_tables['groups'])
 							->set(array('permissions' => $permissions))
 							->where('id', '=', $id)
 							->execute();
@@ -2134,11 +2139,11 @@ class Model_Ion_Auth extends Model_Common
 		{
 			$this->trigger_events('extra_where');
 
-			DB::delete($this->tables['users_groups'])
-				->where($this->join['groups'], '=', $id)
+			DB::delete($this->_tables['users_groups'])
+				->where($this->_join['groups'], '=', $id)
 				->execute();
 
-			$return = DB::delete($this->tables['groups'])
+			$return = DB::delete($this->_tables['groups'])
 						->where('id', '=', $id)
 						->execute();
 
@@ -2230,8 +2235,8 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function set_message_delimiters($start_delimiter, $end_delimiter)
 	{
-		$this->message_start_delimiter = $start_delimiter;
-		$this->message_end_delimiter   = $end_delimiter;
+		$this->_message_start_delimiter = $start_delimiter;
+		$this->_message_end_delimiter   = $end_delimiter;
 
 		return TRUE;
 	}
@@ -2246,8 +2251,8 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function set_error_delimiters($start_delimiter, $end_delimiter)
 	{
-		$this->error_start_delimiter = $start_delimiter;
-		$this->error_end_delimiter   = $end_delimiter;
+		$this->_error_start_delimiter = $start_delimiter;
+		$this->_error_end_delimiter   = $end_delimiter;
 
 		return TRUE;
 	}
@@ -2263,7 +2268,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function set_message($message)
 	{
-		$this->messages[] = ion__($message);
+		$this->_messages[] = ion__($message);
 
 		return $message;
 	}
@@ -2280,9 +2285,9 @@ class Model_Ion_Auth extends Model_Common
 	public function messages()
 	{
 		$_output = '';
-		foreach ($this->messages as $message)
+		foreach ($this->_messages as $message)
 		{
-			$_output .= $this->message_start_delimiter.$message.$this->message_end_delimiter;
+			$_output .= $this->_message_start_delimiter.$message.$this->_message_end_delimiter;
 		}
 
 		return $_output;
@@ -2300,9 +2305,9 @@ class Model_Ion_Auth extends Model_Common
 	public function messages_array()
 	{
 		$_output = array();
-		foreach ($this->messages as $message)
+		foreach ($this->_messages as $message)
 		{
-			$_output[] = $this->message_start_delimiter.$message.$this->message_end_delimiter;
+			$_output[] = $this->_message_start_delimiter.$message.$this->_message_end_delimiter;
 		}
 
 		return $_output;
@@ -2319,7 +2324,7 @@ class Model_Ion_Auth extends Model_Common
 	 */
 	public function set_error($error)
 	{
-		$this->errors[] = ion__($error);
+		$this->_errors[] = ion__($error);
 
 		return $error;
 	}
@@ -2336,9 +2341,9 @@ class Model_Ion_Auth extends Model_Common
 	public function errors()
 	{
 		$_output = '';
-		foreach ($this->errors as $error)
+		foreach ($this->_errors as $error)
 		{
-			$_output .= $this->error_start_delimiter.$error.$this->error_end_delimiter;
+			$_output .= $this->_error_start_delimiter.$error.$this->_error_end_delimiter;
 		}
 
 		return $_output;
@@ -2356,9 +2361,9 @@ class Model_Ion_Auth extends Model_Common
 	public function errors_array()
 	{
 		$_output = array();
-		foreach ($this->errors as $error)
+		foreach ($this->_errors as $error)
 		{
-			$_output[] = $this->error_start_delimiter.$error.$this->error_end_delimiter;
+			$_output[] = $this->_error_start_delimiter.$error.$this->_error_end_delimiter;
 		}
 
 		return $_output;
@@ -2399,7 +2404,7 @@ class Model_Ion_Auth extends Model_Common
 	private function _remember_code_db($id, $remember_code)
 	{
 		$query = DB::select('remember_code')
-					->from($this->tables['users'])
+					->from($this->_tables['users'])
 					->where('id', '=', $id)
 					->where('remember_code', '=', $remember_code)
 					->limit(1)
