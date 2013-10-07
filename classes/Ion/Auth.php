@@ -23,8 +23,8 @@
  * Modified to work with Kohana by Eugene Kudelia
  * https://github.com/eugenekudelia/ion_auth/tree/kohana-v3.3
  */
-class Ion_Auth
-{
+class Ion_Auth {
+
 	/**
 	 * Ion_Auth instance
 	 */

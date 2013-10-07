@@ -28,8 +28,8 @@
  * Modified to work with Kohana by Eugene Kudelia
  * https://github.com/eugenekudelia/ion_auth/tree/kohana-v3.3
  */
-class Model_Ion_Auth extends Model_Common
-{
+class Model_Ion_Auth extends Model_Common {
+
 	/**
 	 *
 	 */
