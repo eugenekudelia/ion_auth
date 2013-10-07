@@ -1226,24 +1226,19 @@ class Model_Ion_Auth extends Model_Common
 		}
 		else
 		{
-			if ( ! $profiles)
+			$select = array(
+				$this->tables['users'].'.*',
+				array($this->tables['users'].'.id', 'id'),
+				array($this->tables['users'].'.id', 'user_id')
+			);
+			! $profiles OR $select = array_merge($select, array($this->tables['profiles'].'.*'));
+
+			$this->_query = DB::select_array($select)->from($this->tables['users']);
+
+			if ($profiles)
 			{
-				//default selects
-				$this->_query = DB::select(
-					$this->tables['users'].'.*',
-				    array($this->tables['users'].'.id', 'id'),
-				    array($this->tables['users'].'.id', 'user_id')
-				)->from($this->tables['users']);
-			}
-			else
-			{
-				// Users + Profiles
-				$this->_query = DB::select(
-					$this->tables['users'].'.*', $this->tables['profiles'].'.*',
-				    array($this->tables['users'].'.id', 'id'),
-				    array($this->tables['users'].'.id', 'user_id')
-				)
-					->from($this->tables['users'])
+				// Users join Profiles
+				$this->_query
 					->join($this->tables['profiles'])
 					->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
 			}
