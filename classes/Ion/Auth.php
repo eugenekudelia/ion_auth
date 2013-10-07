@@ -93,7 +93,7 @@ class Ion_Auth
 	 * @author Ben
 	 * @kohana Eugene Kudelia
 	 */
-	public function __construct()
+	protected function __construct()
 	{
 		// Create Ion Auth model instance
 		$this->ion_auth_model = Model::factory('Ion_Auth');
