@@ -1216,13 +1216,6 @@ class Model_Ion_Auth extends Model_Common
 			}
 
 			$this->_query = DB::select_array($select)->from($this->tables['users']);
-
-			if (isset($select_join) AND ! empty($select_join))
-			{
-				$this->_query
-					->join($this->tables['profiles'])
-					->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
-			}
 		}
 		else
 		{
@@ -1234,14 +1227,14 @@ class Model_Ion_Auth extends Model_Common
 			! $profiles OR $select = array_merge($select, array($this->tables['profiles'].'.*'));
 
 			$this->_query = DB::select_array($select)->from($this->tables['users']);
+		}
 
-			if ($profiles)
-			{
-				// Users join Profiles
-				$this->_query
-					->join($this->tables['profiles'])
-					->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
-			}
+		// Users join Profiles
+		if ((isset($select_join) AND ! empty($select_join)) OR $profiles)
+		{
+			$this->_query
+				->join($this->tables['profiles'])
+				->on($this->tables['profiles'].'.'.$this->join['users'], '=', $this->tables['users'].'.id');
 		}
 
 		//filter by group id(s) if passed
