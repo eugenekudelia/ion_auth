@@ -1219,8 +1219,6 @@ class Model_Ion_Auth extends Model_Common {
 
 				$select = array_merge($select, $select_join);
 			}
-
-			$this->_query = DB::select_array($select)->from($this->_tables['users']);
 		}
 		else
 		{
@@ -1230,9 +1228,9 @@ class Model_Ion_Auth extends Model_Common {
 				array($this->_tables['users'].'.id', 'user_id')
 			);
 			! $profiles OR $select = array_merge($select, array($this->_tables['profiles'].'.*'));
-
-			$this->_query = DB::select_array($select)->from($this->_tables['users']);
 		}
+
+		$this->_query = DB::select_array($select)->from($this->_tables['users']);
 
 		// Users join Profiles
 		if ((isset($select_join) AND ! empty($select_join)) OR $profiles)
