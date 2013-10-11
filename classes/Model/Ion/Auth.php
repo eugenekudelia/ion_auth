@@ -1275,20 +1275,6 @@ class Model_Ion_Auth extends Model_Common {
 	}
 
 	/**
-	 * users_count
-	 *
-	 * @return integer Total number of rows in Users table
-	 * @author Eugene Kudelia
-	 */
-	public function users_count()
-	{
-		return DB::select('id')
-					->from($this->_tables['users'])
-					->execute()
-					->count();
-	}
-
-	/**
 	 * manager users
 	 *
 	 * @return array List of Manager User ID's
