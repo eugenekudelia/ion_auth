@@ -589,7 +589,7 @@ class Ion_Auth {
 	 */
 	public function unique_email($email)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->tables['users'], 'email', $email);
+		return ! $this->row_exists($this->_ion_auth_model->_tables['users'], 'email', $email);
 	}
 
 	/**
@@ -597,7 +597,7 @@ class Ion_Auth {
 	 */
 	public function unique_username($username)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->tables['users'], 'username', $username);
+		return ! $this->row_exists($this->_ion_auth_model->_tables['users'], 'username', $username);
 	}
 
 	/**
@@ -605,7 +605,7 @@ class Ion_Auth {
 	 */
 	public function unique_groupname($name)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->tables['groups'], 'name', $name);
+		return ! $this->row_exists($this->_ion_auth_model->_tables['groups'], 'name', $name);
 	}
 
 	/**
@@ -613,7 +613,7 @@ class Ion_Auth {
 	 */
 	public function unique_grouptitle($title)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->tables['groups'], 'title', $title);
+		return ! $this->row_exists($this->_ion_auth_model->_tables['groups'], 'title', $title);
 	}
 
 	/**

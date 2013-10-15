@@ -36,13 +36,6 @@ class Model_Ion_Auth extends Model_Common {
 	protected $_config;
 
 	/**
-	 * Holds an array of tables used
-	 *
-	 * @var array
-	 */
-	protected $_tables = array();
-
-	/**
 	 * Identity column config
 	 *
 	 * @var string
@@ -157,6 +150,13 @@ class Model_Ion_Auth extends Model_Common {
 	 *
 	 */
 	protected $_cache_user_permissions = array();
+
+	/**
+	 * Holds an array of tables used
+	 *
+	 * @var array
+	 */
+	public $_tables = array();
 
 	/**
 	 * activation code
