@@ -82,6 +82,9 @@ return array(
 	'hint_trusted_email'	=> 'Используйте только доверенный Email',
 	'Send me my password by email'	=> 'Отправить пароль на мой Email',
 
+	// User list
+	'User List'		=> 'Список пользователей',
+	
 	// Create User
 	'Create User Account'	=> 'Новый аккаунт',
 

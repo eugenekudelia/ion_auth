@@ -82,8 +82,11 @@ return array(
 	'hint_trusted_email'	=> 'Use only trusted Email',
 	'Send me my password by email'	=> 'Send me my password by email',
 
+	// User list
+	'User List'		=> 'User List',
+
 	// Create User
-	'Create User Account'							=> 'Create User Account',
+	'Create User Account'	=> 'Create User Account',
 
 	// Edit User
 	'User account does not exist'	=> 'User account does not exist',
