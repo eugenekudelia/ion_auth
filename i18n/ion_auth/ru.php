@@ -152,8 +152,8 @@ return array(
 
 	// User list 
 	'User List'	=> 'Список пользователей',
-	'User filter'	=> 'Фильтры пользователей',
-	'No filter'		=> 'Без фильтра',
+	'Filters'	=> 'Фильтры',
+	'Reset filter'	=> 'Сбросить фильтр',
 	'by status'	=> 'статус',
 	'by group'	=> 'группа',
 	'all managers / users'	=> 'менеджеры / посетители',

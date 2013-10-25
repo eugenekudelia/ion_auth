@@ -152,8 +152,8 @@ return array(
 
 	// User list 
 	'User List'		=> 'User List',
-	'User filter'	=> 'User filter',
-	'No filter'		=> 'No filter',
+	'Filters'		=> 'Filters',
+	'Reset filter'	=> 'Reset filter',
 	'by status'		=> 'by status',
 	'by group'		=> 'by group',
 	'all managers / users'	=> '',
