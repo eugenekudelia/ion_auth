@@ -36,11 +36,16 @@ class Model_Ion_Auth extends Model_Common {
 	protected $_config;
 
 	/**
-	 * Identity column config
-	 *
-	 * @var string
+	 * Session instance
 	 */
-	protected $_identity_column;
+	protected $_session;
+
+	/**
+	 * Holds an array of tables used
+	 *
+	 * @var array
+	 */
+	protected $_tables = array();
 
 	/**
 	 * Config items: name of Users table column
@@ -49,6 +54,13 @@ class Model_Ion_Auth extends Model_Common {
 	 * @var array
 	 */
 	protected $_join;
+
+	/**
+	 * Identity column config
+	 *
+	 * @var string
+	 */
+	protected $_identity_column;
 
 	/**
 	 * Store salt
@@ -127,11 +139,6 @@ class Model_Ion_Auth extends Model_Common {
 	protected $_cache_groups = array();
 
 	/**
-	 * Session instance
-	 */
-	protected $_session;
-
-	/**
 	 * Bcrypt class parameter
 	 */
 	protected $_rounds;
@@ -150,13 +157,6 @@ class Model_Ion_Auth extends Model_Common {
 	 *
 	 */
 	protected $_cache_user_permissions = array();
-
-	/**
-	 * Holds an array of tables used
-	 *
-	 * @var array
-	 */
-	public $_tables = array();
 
 	/**
 	 * activation code
@@ -235,6 +235,18 @@ class Model_Ion_Auth extends Model_Common {
 	public function _session()
 	{
 		return $this->_session;
+	}
+
+	/**
+	 * Returns Ion Auth config array of tables used
+	 *
+	 * $param  string Table identifier
+	 * @return string Table name
+	 * @author Eugene Kudelia
+	 */
+	public function _tables($table)
+	{
+		return $this->_tables[$table];
 	}
 
 	/**

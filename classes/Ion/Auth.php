@@ -589,7 +589,7 @@ class Ion_Auth {
 	 */
 	public function unique_email($email)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->_tables['users'], 'email', $email);
+		return ! $this->row_exists($this->_tables('users'), 'email', $email);
 	}
 
 	/**
@@ -597,7 +597,7 @@ class Ion_Auth {
 	 */
 	public function unique_username($username)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->_tables['users'], 'username', $username);
+		return ! $this->row_exists($this->_tables('users'), 'username', $username);
 	}
 
 	/**
@@ -605,7 +605,7 @@ class Ion_Auth {
 	 */
 	public function unique_groupname($name)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->_tables['groups'], 'name', $name);
+		return ! $this->row_exists($this->_tables('groups'), 'name', $name);
 	}
 
 	/**
@@ -613,7 +613,7 @@ class Ion_Auth {
 	 */
 	public function unique_grouptitle($title)
 	{
-		return ! $this->row_exists($this->_ion_auth_model->_tables['groups'], 'title', $title);
+		return ! $this->row_exists($this->_tables('groups'), 'title', $title);
 	}
 
 	/**
@@ -639,24 +639,3 @@ class Ion_Auth {
 	}
 
 } // End Ion_Auth
-
-/**
- * Ion Auth for Kohana translation/internationalization function.
- *
- *    ion__('Welcome back, Ben);
- * 
- * @uses    I18n::get
- * @uses    Lang::module
- * @param   string  $string text to translate
- * $param   array   $path   local path to lang file
- * @param   array   $values values to replace in the translated text
- * @param   string  $lang   target language
- * @return  string
- */
-function ion__($string, array $values = NULL, $path = '', $lang = NULL)
-{
-	$lang = Lang::module('ion_auth', $path, $lang);
-	$string = I18n::get($string, $lang);
-
-	return empty($values) ? $string : strtr($string, $values);
-}
