@@ -238,7 +238,7 @@ class Model_Ion_Auth extends Model_Common {
 	}
 
 	/**
-	 * Returns Ion Auth config array of tables used
+	 * Returns Ion Auth pre-configured table name
 	 *
 	 * $param  string Table identifier
 	 * @return string Table name
