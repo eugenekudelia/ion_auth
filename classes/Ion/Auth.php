@@ -537,22 +537,34 @@ class Ion_Auth {
 	/**
 	 * is (default) admin logged in user?
 	 *
-	 * @return bool
-	 * @author Eugene Kudelia
+	 * @param   mixed NULL | bool
+	 * @return  bool
+	 * @author  Eugene Kudelia
 	 */
-	public function admin($default = FALSE)
+	public function admin($default = NULL)
 	{
-		if ($this->logged_in())
+		if ( ! $this->logged_in())
 		{
-			$user = $this->select('cms')->user()->row();
-			$cms = is_object($user) ? $user->cms : NULL;
-			if (is_numeric($cms))
-			{
-				return $default ? $cms == 2 : $cms > 0;
-			}
+			return NULL;
 		}
 
-		return FALSE;
+		$user = $this->select('cms')->user()->row();
+		$cms = is_object($user) ? $user->cms : NULL;
+		if (is_numeric($cms))
+		{
+			if ($default === NULL)
+			{
+				return $cms > 0;
+			}
+			if ($default === FALSE)
+			{
+				return $cms == 1;
+			}
+			if ($default === TRUE)
+			{
+				return $cms == 2;
+			}
+		}
 	}
 
 	/**
@@ -583,6 +595,7 @@ class Ion_Auth {
 
 		return $this->_cache_user_has_cms_access[$id];
 	}
+
 
 	/**
 	 *
