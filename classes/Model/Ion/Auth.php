@@ -216,7 +216,7 @@ class Model_Ion_Auth extends Model_Common {
 	}
 
 	/**
-	 * Returns Kohana session object
+	 * Returns Ion Auth config object
 	 *
 	 * @return object
 	 * @author Eugene Kudelia
@@ -227,7 +227,7 @@ class Model_Ion_Auth extends Model_Common {
 	}
 
 	/**
-	 * Returns Ion Auth config object
+	 * Returns Kohana session object
 	 *
 	 * @return object
 	 * @author Eugene Kudelia
@@ -238,9 +238,9 @@ class Model_Ion_Auth extends Model_Common {
 	}
 
 	/**
-	 * Returns Ion Auth pre-configured table name
+	 * Returns Ion Auth table name
 	 *
-	 * $param  string Table identifier
+	 * $param  string Table alias
 	 * @return string Table name
 	 * @author Eugene Kudelia
 	 */
