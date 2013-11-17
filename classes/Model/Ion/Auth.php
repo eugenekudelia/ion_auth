@@ -1715,7 +1715,7 @@ class Model_Ion_Auth extends Model_Common {
 		}
 
 		$profile['edited_on'] = time();
-		$profile['edited_by'] = $this->_session->get('user_id');
+		$profile['editor_id'] = $this->_session->get('user_id');
 
 		try
 		{
