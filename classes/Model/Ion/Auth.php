@@ -1685,12 +1685,6 @@ class Model_Ion_Auth extends Model_Common {
 			return FALSE;
 		}
 
-		if (empty($user_data) AND empty($profile))
-		{
-			$this->set_error('update_data_mismatch');
-			return FALSE;
-		}
-
 		$db = Database::instance();
 		$db->begin();
 
