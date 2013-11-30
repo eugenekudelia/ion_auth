@@ -947,7 +947,6 @@ class Model_Ion_Auth extends Model_Common {
 				'user_id'		=> $id,
 			    'ip_address'	=> $this->_ip_address(),
 			    'created_on'	=> time(),
-			    'created_by'	=> $this->_session->get('user_id'),
 				'display_name'	=> $display_name
 			);
 
