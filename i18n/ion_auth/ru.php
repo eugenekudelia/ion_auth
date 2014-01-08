@@ -114,7 +114,7 @@ return array(
 	// Edit User - Permissions
 	'Access to resources / actions:'	=> 'Доступ к ресурсам / действиям:',
 	'Member of the Administrator group has got full access.'
-		=> 'Участник группы Administrator обладает полным доступом.',
+		=> 'Участник группы Administrator имееет полный доступ.',
 	// Edit User - Profile
 	'Display Name'	=> 'Отображаемое имя',
 	'(Full) Name'	=> '(Полное) имя',
