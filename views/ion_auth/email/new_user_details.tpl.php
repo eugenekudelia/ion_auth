@@ -1,6 +1,6 @@
 <html>
 <body>
-	<p><?php echo ion__('Thank you for registering on :site_link. Your account details are:', array(':site_link' => HTML::anchor(Get::site_start_uri(), $site_name, NULL, 'http')), 'email'); ?></p>
+	<p><?php echo ion__('Thank you for registering on :site_link. Your account details are:', array(':site_link' => HTML::anchor(SITE_URL, $site_name, NULL, 'http')), 'email'); ?></p>
 	<p><?php echo ion__('Username').': <strong>'.$username.'</strong>'; ?>
 	<br /><?php echo ion__('Password').': <strong>'.$password.'</strong>'; ?>
 	</p>
